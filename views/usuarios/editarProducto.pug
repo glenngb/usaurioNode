@@ -1,0 +1,33 @@
+doctype html
+html
+  head
+    title Editar Producto
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css")
+  body
+    .container
+      h1.mt-5 Editar Producto
+
+      form(action=`/productos/${producto.id}/actualizar` method="POST")
+        .form-group
+          label(for="nombre") Nombre:
+          input.form-control(type="text" name="nombre" value=producto.nombre required)
+
+        .form-group
+          label(for="descripcion") Descripción:
+          input.form-control(type="text" name="descripcion" value=producto.descripcion required)
+
+        .form-group
+          label(for="precio") Precio:
+          input.form-control(type="number" step="0.01" name="precio" value=producto.precio required)
+
+        .form-group
+          label(for="inventario") Inventario:
+          input.form-control(type="number" name="inventario" value=producto.inventario required)
+
+        .form-group
+          label(for="categoria") Categoría:
+          input.form-control(type="text" name="categoria" value=producto.categoria required)
+
+        button.btn.btn-primary(type="submit") Actualizar Producto
+
+      a.btn.btn-secondary.mt-3(href="/productos") Volver a la lista de productos

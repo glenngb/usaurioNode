@@ -1,0 +1,43 @@
+doctype html
+html
+  head
+    title #{producto.nombre}
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css")
+  body
+    .container
+      .row.mt-5
+        .col-md-8.offset-md-2
+          .card
+            .card-body
+              h1.card-title #{producto.nombre}
+              p.card-text.lead #{producto.descripcion}
+
+              hr
+
+              .row
+                .col-md-6
+                  p.font-weight-bold Precio: 
+                  span.badge.badge-success #{producto.precio} $
+                .col-md-6
+                  p.font-weight-bold Inventario: 
+                  span.badge.badge-info #{producto.inventario}
+
+              hr
+
+              .row.mt-3
+                .col
+                  a.btn.btn-secondary(href="/productos") Volver a la lista de productos
+
+              .row.mt-3
+                .col-md-6
+                  // Formulario para eliminar producto
+                  form(action=`/productos/${producto.id}/eliminar` method="POST")
+                    button.btn.btn-danger(type="submit") Eliminar Producto
+
+                .col-md-6
+                  // Formulario para actualizar producto
+                  a.btn.btn-primary(href=`/productos/${producto.id}/editar`) Actualizar Producto
+
+    script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js")

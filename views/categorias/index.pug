@@ -1,0 +1,38 @@
+doctype html
+html
+  head
+    title Categorias
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css")
+  body
+    .container
+      h1.mt-5 Lista de Categorias
+      
+      // Tabla de productos con Bootstrap
+      table.table.table-striped.mt-4
+        thead
+          tr
+            th Nombre
+            th Descripción
+        tbody
+          each categoria in categorias
+            tr
+              td #{categoria.nombre}
+              td #{categoria.descripcion}
+              td 
+                a.btn.btn-info(href=`/categoria/${categoria.id}`) Ver Detalles
+              
+      h2.mt-5 Crear una nueva categoria
+      form(action="/categorias" method="POST" class="mt-3")
+        .form-group
+          label(for="nombre") Nombre:
+          input.form-control(type="text" name="nombre" required)
+
+        .form-group
+          label(for="descripcion") Descripción:
+          input.form-control(type="text" name="descripcion" required)
+        
+        button.btn.btn-primary(type="submit") Crear Categoria
+
+    script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js")
