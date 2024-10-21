@@ -12,8 +12,8 @@ html
         thead
           tr
             th Nombre
-            th Rut
-             th Correo
+            th RUT
+            th Correo
             th Rol
         tbody
           each usuario in usuarios
@@ -22,25 +22,27 @@ html
               td #{usuario.rut}
               td #{usuario.correo}
               td #{usuario.rol}
-              
+
       h2.mt-5 Crear un nuevo usuario
       form(action="/usuarios" method="POST" class="mt-3")
         .form-group
           label(for="nombre") Nombre:
-          input.form-control(type="text" name="nombre" required)
-
+          input.form-control(type="text" name="nombre" id="nombre" required)
+        
         .form-group
           label(for="rut") RUT:
-          input.form-control(type="number" name="rut" required)
+          input.form-control(type="text" name="rut" id="rut" required pattern="^(\d{1,2}\.\d{3}\.\d{3}-[\dkK])$" placeholder="12.345.678-9")
 
-           .form-group
+        .form-group
           label(for="correo") Correo:
-          input.form-control(type="text" name="correo" required)
+          input.form-control(type="email" name="correo" id="correo" required placeholder="nombre@dominio.com")
 
-           .form-group
-          label(for="rol") Correo:
-          input.form-control(type="text" name="rol" required)
-        
+        .form-group
+          label(for="rol") Rol:
+          select.form-control(name="rol" id="rol" required)
+            option(value="admin") Admin
+            option(value="user") Usuario
+
         button.btn.btn-primary(type="submit") Crear Usuario
 
     script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js")
