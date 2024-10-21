@@ -1,7 +1,7 @@
 const Usuario = require('../models/Usuario');
 
 const obtenerTodosLosUsuarios = async () => {
-  return await Estudiante.findAll();
+  return await Usuario.findAll();
 };
 
 const obtenerUsuarioPorId = async (id) => {

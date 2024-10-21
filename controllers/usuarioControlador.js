@@ -3,7 +3,7 @@ const Usuario = require('../models/Usuario');
 
 const obtenerUsuarios = async (req, res) => {
   const usuarios = await usuarioServicio.obtenerTodosLosUsuarios();
-  res.render('usuario/index', {usuario});
+  res.render('usuario/index', {usuarios});
 };
 
 const obtenerUsuario = async (req, res) => {
