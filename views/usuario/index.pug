@@ -24,14 +24,22 @@ html
               td #{usuario.rol}
               
       h2.mt-5 Crear un nuevo usuario
-      form(action="/categorias" method="POST" class="mt-3")
+      form(action="/usuarios" method="POST" class="mt-3")
         .form-group
           label(for="nombre") Nombre:
           input.form-control(type="text" name="nombre" required)
 
         .form-group
-          label(for="descripcion") Descripción:
-          input.form-control(type="text" name="descripcion" required)
+          label(for="rut") RUT:
+          input.form-control(type="number" name="rut" required)
+
+           .form-group
+          label(for="correo") Correo:
+          input.form-control(type="text" name="correo" required)
+
+           .form-group
+          label(for="rol") Correo:
+          input.form-control(type="text" name="rol" required)
         
         button.btn.btn-primary(type="submit") Crear Usuario
 
