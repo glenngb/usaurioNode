@@ -1,0 +1,19 @@
+extends ../layout
+
+block content
+  h1 Editar Usuario
+  form(action=`/usuarios/${usuario.id}/actualizar` method="POST")
+    div
+      label(for="nombre") Nombre:
+      input(type="text" name="nombre" id="nombre" value=usuario.nombre required)
+    div
+      label(for="rut") RUT:
+      input(type="text" name="rut" id="rut" value=usuario.rut required)
+    div
+      label(for="correo") Correo:
+      input(type="email" name="correo" id="correo" value=usuario.correo)
+    div
+      label(for="rol") Rol:
+      input(type="number" name="rol" id="rol" value=usuario.rol required)
+    div
+      button(type="submit") Guardar Cambios
