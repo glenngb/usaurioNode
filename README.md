@@ -3,7 +3,7 @@
 
 ## 22 Octubre 2024
 
-
+### Integrantes
 ```
 Glenn García
 Iván Rodríguez
