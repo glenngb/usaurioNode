@@ -6,6 +6,6 @@
 ### Integrantes
 ```
 Glenn García
-Iván Rodríguez
+Iván Rodríguez M.
 Aarón Ulloa
 ```
