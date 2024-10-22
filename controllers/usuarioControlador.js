@@ -12,10 +12,37 @@ const obtenerUsuario = async (req, res) => {
 };
 
 const crearUsuario = async (req, res) => {
-  const { nombre, rut, correo, rol } = req.body;
-  await usuarioServicio.crearUsuario({ nombre, rut, correo, rol });
-  res.redirect('/usuarios');
+  const { nombre, rut, correo, pass, rol } = req.body;
+
+  // Convertir el rol a su valor numérico
+  let rolNumerico;
+  if (rol === 'admin') {
+      rolNumerico = 1;
+  } else if (rol === 'user') {
+      rolNumerico = 0;
+  } else if (rol === 'vendor') {
+      rolNumerico = 2;
+  }
+
+  try {
+      // Crear el usuario en la base de datos
+      await usuarioServicio.crearUsuario({
+          nombre,
+          rut,
+          correo,
+          pass, 
+          rol: rolNumerico, 
+      });
+
+      // Redirigir a la lista de usuarios después de la creación
+      res.redirect('/usuarios');
+  } catch (error) {
+      console.error('Error al crear el usuario:', error);
+      res.status(500).send('Error al crear el usuario');
+  }
 };
+
+
 
 // Controlador para actualizar el usuario
 const actualizarUsuario = async (req, res) => {

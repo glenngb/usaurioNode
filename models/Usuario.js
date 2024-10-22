@@ -7,7 +7,7 @@ const Usuario = sequelize.define('Usuario', {
     allowNull: false,
   },
   rut: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   correo: {
