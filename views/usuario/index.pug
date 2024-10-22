@@ -3,11 +3,16 @@ html
   head
     title Usuarios
     link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css")
+    script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js")
+     // FontAwesome CDN
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css")
   body
     .container
       h1.mt-5 Lista de Usuarios
       
-      // Tabla de usuarios con Bootstrap
+      // Tabla de usuarios con Bootstrap y los iconos de editar y eliminar
       table.table.table-striped.mt-4
         thead
           tr
@@ -15,6 +20,7 @@ html
             th RUT
             th Correo
             th Rol
+            th Acciones
         tbody
           each usuario in usuarios
             tr
@@ -22,6 +28,15 @@ html
               td #{usuario.rut}
               td #{usuario.correo}
               td #{usuario.rol}
+              td 
+                // Botón de editar con icono
+                button.btn.btn-warning.btn-sm(type="button" data-toggle="modal" data-target="#editarUsuarioModal" data-id=usuario.id data-nombre=usuario.nombre data-rut=usuario.rut data-correo=usuario.correo data-rol=usuario.rol)
+                  i.fas.fa-edit
+
+                // Botón de eliminar con icono
+                form(action=`/usuarios/${usuario.id}/eliminar` method="POST" class="d-inline")
+                  button.btn.btn-danger.btn-sm(type="submit" onclick="return confirm('¿Estás seguro que deseas eliminar este usuario?')")
+                    i.fas.fa-trash
 
       h2.mt-5 Crear un nuevo usuario
       form(action="/usuarios" method="POST" class="mt-3")
@@ -31,20 +46,75 @@ html
         
         .form-group
           label(for="rut") RUT:
-          input.form-control(type="text" name="rut" id="rut" required pattern="^(\d{1,2}\.\d{3}\.\d{3}-[\dkK])$" placeholder="12.345.678-9")
+          input.form-control(type="text" name="rut" id="rut" placeholder="12.345.678-9")
 
         .form-group
           label(for="correo") Correo:
           input.form-control(type="email" name="correo" id="correo" required placeholder="nombre@dominio.com")
 
         .form-group
+          label(for="pass") Clave:
+          input.form-control(type="text" name="pass" id="pass")
+        
+        .form-group
           label(for="rol") Rol:
           select.form-control(name="rol" id="rol" required)
             option(value="admin") Admin
             option(value="user") Usuario
+            option(value="vendor") Vendedor
 
         button.btn.btn-primary(type="submit") Crear Usuario
 
-    script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js")
-    script(src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js")
-    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js")
+    // Modal para editar usuario
+    div.modal.fade(id="editarUsuarioModal" tabindex="-1" role="dialog" aria-labelledby="editarUsuarioModalLabel" aria-hidden="true")
+      div.modal-dialog(role="document")
+        div.modal-content
+          div.modal-header
+            h5.modal-title#editarUsuarioModalLabel Editar Usuario
+            button.close(type="button" data-dismiss="modal" aria-label="Close")
+              span(aria-hidden="true") &times;
+          div.modal-body
+            form(action="/usuarios" method="POST" id="formEditarUsuario")
+              input(type="hidden" name="id" id="editar-id")
+              .form-group
+                label(for="editar-nombre") Nombre:
+                input.form-control(type="text" name="nombre" id="editar-nombre" required)
+              
+              .form-group
+                label(for="editar-rut") RUT:
+                input.form-control(type="text" name="rut" id="editar-rut" required)
+              
+              .form-group
+                label(for="editar-correo") Correo:
+                input.form-control(type="email" name="correo" id="editar-correo" required)
+              
+              .form-group
+                label(for="editar-rol") Rol:
+                select.form-control(name="rol" id="editar-rol" required)
+                  option(value="admin") Admin
+                  option(value="user") Usuario
+                  option(value="vendor") Vendedor
+
+              button.btn.btn-primary(type="submit") Actualizar Usuario
+          div.modal-footer
+            button.btn.btn-secondary(type="button" data-dismiss="modal") Cerrar
+
+script.
+  $('#editarUsuarioModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Botón que activó el modal
+    var id = button.data('id');
+    var nombre = button.data('nombre');
+    var rut = button.data('rut');
+    var correo = button.data('correo');
+    var rol = button.data('rol');
+
+    var modal = $(this);
+    modal.find('.modal-body #editar-id').val(id);
+    modal.find('.modal-body #editar-nombre').val(nombre);
+    modal.find('.modal-body #editar-rut').val(rut);
+    modal.find('.modal-body #editar-correo').val(correo);
+    modal.find('.modal-body #editar-rol').val(rol);
+    
+    // Cambiar la acción del formulario para que apunte a la ruta de actualización del usuario
+    modal.find('form').attr('action', `/usuarios/${id}/actualizar`);
+  });

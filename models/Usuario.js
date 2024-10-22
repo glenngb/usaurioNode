@@ -13,6 +13,10 @@ const Usuario = sequelize.define('Usuario', {
   correo: {
     type: DataTypes.STRING,
   },
+  pass: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   rol: {
     type: DataTypes.INTEGER,
     allowNull: false,

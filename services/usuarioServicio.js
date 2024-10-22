@@ -21,7 +21,7 @@ const actualizarUsuario = async (id, datos) => {
 };
 
 const eliminarUsuario = async (id) => {
-  const usaurio = await Usuario.findByPk(id);
+  const usuario = await Usuario.findByPk(id);
   if (usuario) {
     return await usuario.destroy();
   }
