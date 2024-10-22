@@ -6,6 +6,8 @@ html
     script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js")
     script(src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
+
      // FontAwesome CDN
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css")
   body
@@ -28,15 +30,12 @@ html
               td #{usuario.rut}
               td #{usuario.correo}
               td #{usuario.rol}
-              td 
-                // Botón de editar con icono
+              td
                 button.btn.btn-warning.btn-sm(type="button" data-toggle="modal" data-target="#editarUsuarioModal" data-id=usuario.id data-nombre=usuario.nombre data-rut=usuario.rut data-correo=usuario.correo data-rol=usuario.rol)
                   i.fas.fa-edit
+                button.btn.btn-danger.btn-sm.btn-eliminar(type="button" data-id=usuario.id)
+                  i.fas.fa-trash-alt
 
-                // Botón de eliminar con icono
-                form(action=`/usuarios/${usuario.id}/eliminar` method="POST" class="d-inline")
-                  button.btn.btn-danger.btn-sm(type="submit" onclick="return confirm('¿Estás seguro que deseas eliminar este usuario?')")
-                    i.fas.fa-trash
 
       h2.mt-5 Crear un nuevo usuario
       form(action="/usuarios" method="POST" class="mt-3")
@@ -65,7 +64,7 @@ html
 
         button.btn.btn-primary(type="submit") Crear Usuario
 
-    // Modal para editar usuario
+      // Modal para editar usuario
     div.modal.fade(id="editarUsuarioModal" tabindex="-1" role="dialog" aria-labelledby="editarUsuarioModalLabel" aria-hidden="true")
       div.modal-dialog(role="document")
         div.modal-content
@@ -118,3 +117,60 @@ script.
     // Cambiar la acción del formulario para que apunte a la ruta de actualización del usuario
     modal.find('form').attr('action', `/usuarios/${id}/actualizar`);
   });
+
+
+
+
+script.
+  document.addEventListener('DOMContentLoaded', function () {
+    const eliminarBtns = document.querySelectorAll('.btn-eliminar');
+
+    eliminarBtns.forEach(btn => {
+      btn.addEventListener('click', function () {
+        const userId = this.getAttribute('data-id'); // Obtener el ID del usuario
+
+        // Mostrar la alerta de confirmación
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: "No podrás revertir esta acción",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminar',
+          cancelButtonText: 'Cancelar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Si el usuario confirma, hacer la petición de eliminación
+            fetch(`/usuarios/${userId}/eliminar`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                Swal.fire(
+                  'Eliminado!',
+                  'El usuario ha sido eliminado.',
+                  'success'
+                );
+                location.reload();
+                 
+              } else {
+                Swal.fire('Error', 'No se pudo eliminar el usuario.', 'error');
+              }
+            })
+            .catch(error => {
+              Swal.fire('Error', 'Hubo un problema al eliminar el usuario.', 'error');
+            });
+          }
+        });
+      });
+    });
+  });
+
+
+
+   

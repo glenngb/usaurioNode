@@ -80,8 +80,15 @@ const actualizarUsuario = async (req, res) => {
 
 
 const eliminarUsuario = async (req, res) => {
-  await usuarioServicio.eliminarUsuario(req.params.id);
-  res.redirect('/usuarios');
+  const { id } = req.params; // Captura el ID del usuario desde la URL
+  try {
+      await usuarioServicio.eliminarUsuario(id); // Llama al servicio para eliminar el usuario
+      res.status(200).json({ success: true, message: 'Usuario eliminado correctamente' });
+
+  } catch (error) {
+      console.error('Error al eliminar el usuario:', error);
+      res.status(500).json({ message: 'Error al eliminar el usuario' });
+  }
 };
 
 const mostrarFormularioEditarUsuario = async (req, res) => {

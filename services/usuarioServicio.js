@@ -21,11 +21,11 @@ const actualizarUsuario = async (id, datos) => {
 };
 
 const eliminarUsuario = async (id) => {
-  const usuario = await Usuario.findByPk(id);
-  if (usuario) {
-    return await usuario.destroy();
+  try {
+      await Usuario.destroy({ where: { id } }); // Elimina el usuario con el ID proporcionado
+  } catch (error) {
+      throw error;
   }
-  return null;
 };
 
 module.exports = {
