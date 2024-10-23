@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const { conectarBD, sequelize } = require('./config/db');
 const usuarioRutas = require('./routes/usuarioRutas');
+const productoRutas = require('./routes/productoRutas');
 
 
 dotenv.config();
@@ -34,6 +35,7 @@ app.get('/', (req, res) => {
   res.render('index', { titulo: 'Bienvenido a la Tienda' });
 });
 app.use('/usuarios', usuarioRutas);
+app.use('/productos', productoRutas);
 
 
 const PUERTO = process.env.PUERTO || 3000;
