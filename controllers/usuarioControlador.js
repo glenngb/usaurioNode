@@ -14,6 +14,11 @@ const obtenerUsuario = async (req, res) => {
 const crearUsuario = async (req, res) => {
   const { nombre, rut, correo, pass, rol } = req.body;
 
+  // Validaciones (descomentarlas para activar)
+  // if (!nombre || !rut || !correo || !pass || !rol) {
+  //     return res.status(400).send('Todos los campos son obligatorios');
+  // }
+
   // Convertir el rol a su valor numérico
   let rolNumerico;
   if (rol === 'admin') {
@@ -47,6 +52,11 @@ const crearUsuario = async (req, res) => {
 // Controlador para actualizar el usuario
 const actualizarUsuario = async (req, res) => {
   const { id, nombre, rut, correo, rol } = req.body;
+
+  // Validaciones (descomentarlas para activar)
+  // if (!id || !nombre || !rut || !correo || !rol) {
+  //     return res.status(400).send('Todos los campos son obligatorios');
+  // }
 
   // Convertir el rol a su valor numérico
   let rolNumerico;

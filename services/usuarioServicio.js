@@ -1,4 +1,5 @@
 const Usuario = require('../models/Usuario');
+const bcrypt = require('bcrypt');
 
 const obtenerTodosLosUsuarios = async () => {
   return await Usuario.findAll();
@@ -8,8 +9,26 @@ const obtenerUsuarioPorId = async (id) => {
   return await Usuario.findByPk(id);
 };
 
-const crearUsuario = async (datos) => {
-  return await Usuario.create(datos);
+
+const crearUsuario = async ({ nombre, rut, correo, pass, rol }) => {
+  try {
+   
+    const hashedPassword = await bcrypt.hash(pass, 10);
+
+    
+    const nuevoUsuario = await Usuario.create({
+      nombre,
+      rut,
+      correo,
+      pass: hashedPassword, 
+      rol
+    });
+
+    return nuevoUsuario; 
+  } catch (error) {
+    console.error("Error al crear el usuario:", error);
+    throw error;
+  }
 };
 
 const actualizarUsuario = async (id, datos) => {
