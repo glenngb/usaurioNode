@@ -9,6 +9,19 @@ const sequelize = new Sequelize(process.env.DB_NOMBRE, process.env.DB_USUARIO, p
   dialect: 'postgres',
 });
 
+// Validaciones comentadas para desactivarlas momentáneamente
+// if (!process.env.DB_NOMBRE) {
+//   throw new Error('DB_NOMBRE no está definido en las variables de entorno.');
+// }
+// if (!process.env.DB_USUARIO) {
+//   throw new Error('DB_USUARIO no está definido en las variables de entorno.');
+// }
+// if (!process.env.DB_CONTRASENA) {
+//   throw new Error('DB_CONTRASENA no está definido en las variables de entorno.');
+// }
+// if (!process.env.DB_HOST) {
+//   throw new Error('DB_HOST no está definido en las variables de entorno.');
+// }
 
 const conectarBD = async () => {
   try {
