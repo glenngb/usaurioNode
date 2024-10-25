@@ -14,20 +14,26 @@ const obtenerUsuario = async (req, res) => {
 const crearUsuario = async (req, res) => {
   const { nombre, rut, correo, pass, rol } = req.body;
 
-  // Validaciones (descomentarlas para activar)
-  // if (!nombre || !rut || !correo || !pass || !rol) {
-  //     return res.status(400).send('Todos los campos son obligatorios');
-  // }
+   if (!nombre || !rut || !correo || !pass || !rol) {
+       return res.status(400).send('Todos los campos son obligatorios');
+   }
+   const ROLES = {
+       ADMIN: 1,
+       USER: 0,
+       VENDOR: 3
+    }
 
   // Convertir el rol a su valor numérico
-  let rolNumerico;
-  if (rol === 'admin') {
-      rolNumerico = 1;
-  } else if (rol === 'user') {
-      rolNumerico = 0;
-  } else if (rol === 'vendor') {
-      rolNumerico = 2;
-  }
+
+    if (rol === ROLES.ADMIN) {
+        rolNumerico = 1;
+    } else if (rol === ROLES.USER) {
+        rolNumerico = 0;
+    } else if (rol === ROLES.VENDOR) {
+        rolNumerico = 2;
+    }
+
+
 
   try {
       // Crear el usuario en la base de datos
@@ -53,18 +59,22 @@ const crearUsuario = async (req, res) => {
 const actualizarUsuario = async (req, res) => {
   const { id, nombre, rut, correo, rol } = req.body;
 
-  // Validaciones (descomentarlas para activar)
-  // if (!id || !nombre || !rut || !correo || !rol) {
-  //     return res.status(400).send('Todos los campos son obligatorios');
-  // }
+   if (!id || !nombre || !rut || !correo || !rol) {
+       return res.status(400).send('Todos los campos son obligatorios');
+   }
 
   // Convertir el rol a su valor numérico
+    const ROLES = {
+        ADMIN: 1,
+        USER: 0,
+        VENDOR: 3
+    }
   let rolNumerico;
-  if (rol === 'admin') {
+  if (rol === ROLES.ADMIN) {
       rolNumerico = 1;
-  } else if (rol === 'user') {
+  } else if (rol === ROLES.USER) {
       rolNumerico = 0;
-  } else if (rol === 'vendor') {
+  } else if (rol === ROLES.VENDOR) {
       rolNumerico = 2;
   }
 

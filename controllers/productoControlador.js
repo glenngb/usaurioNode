@@ -15,13 +15,12 @@ const obtenerProducto = async (req, res) => {
 const crearProducto = async (req, res) => {
     const { id, nombre, descripcion, precio, inventario, categoria } = req.body;
 
-    // Validaciones (inactivas temporalmente)
-    // if (!nombre || !descripcion || !precio || !inventario || !categoria) {
-    //     return res.status(400).send('Todos los campos son obligatorios');
-    // }
-    // if (precio < 0 || inventario < 0) {
-    //     return res.status(400).send('El precio y el inventario deben ser mayores o iguales a cero');
-    // }
+     if (!nombre || !descripcion || !precio || !inventario || !categoria) {
+         return res.status(400).send('Todos los campos son obligatorios');
+     }
+     if (precio < 0 || inventario < 0) {
+         return res.status(400).send('El precio y el inventario deben ser mayores o iguales a cero');
+     }
 
     try {
         // Crear el producto en la base de datos
@@ -48,13 +47,12 @@ const crearProducto = async (req, res) => {
 const actualizarProducto = async (req, res) => {
     const { id, nombre, descripcion, precio, inventario, categoria } = req.body;
 
-    // Validaciones (inactivas temporalmente)
-    // if (!nombre || !descripcion || !precio || !inventario || !categoria) {
-    //     return res.status(400).send('Todos los campos son obligatorios');
-    // }
-    // if (precio < 0 || inventario < 0) {
-    //     return res.status(400).send('El precio y el inventario deben ser mayores o iguales a cero');
-    // }
+     if (!nombre || !descripcion || !precio || !inventario || !categoria) {
+         return res.status(400).send('Todos los campos son obligatorios');
+     }
+     if (precio < 0 || inventario < 0) {
+         return res.status(400).send('El precio y el inventario deben ser mayores o iguales a cero');
+     }
 
     try {
         // Actualizar el producto en la base de datos con los valores recibidos
