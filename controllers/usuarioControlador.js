@@ -22,15 +22,16 @@ const crearUsuario = async (req, res) => {
        USER: 0,
        VENDOR: 3
     }
-
   // Convertir el rol a su valor numérico
-
-    if (rol === ROLES.ADMIN) {
-        rolNumerico = 1;
-    } else if (rol === ROLES.USER) {
-        rolNumerico = 0;
-    } else if (rol === ROLES.VENDOR) {
-        rolNumerico = 2;
+    let rolNumerico
+    if (rol === 'ADMIN') {
+        rolNumerico = ROLES.ADMIN;
+    } else if (rol === 'USER') {
+        rolNumerico = ROLES.USER;
+    } else if (rol === 'VENDOR') {
+        rolNumerico = ROLES.VENDOR;
+    } else {
+        return res.status(400).send('Rol inválido');
     }
 
 
@@ -67,18 +68,23 @@ const actualizarUsuario = async (req, res) => {
     const ROLES = {
         ADMIN: 1,
         USER: 0,
-        VENDOR: 3
-    }
-  let rolNumerico;
-  if (rol === ROLES.ADMIN) {
-      rolNumerico = 1;
-  } else if (rol === ROLES.USER) {
-      rolNumerico = 0;
-  } else if (rol === ROLES.VENDOR) {
-      rolNumerico = 2;
-  }
+        VENDOR: 2
+    };
 
-  try {
+    // Asignar el valor numérico correspondiente al rol
+    let rolNumerico;
+    if (rol === 'ADMIN') {
+        rolNumerico = ROLES.ADMIN;
+    } else if (rol === 'USER') {
+        rolNumerico = ROLES.USER;
+    } else if (rol === 'VENDOR') {
+        rolNumerico = ROLES.VENDOR;
+    } else {
+        return res.status(400).send('Rol inválido');
+    }
+
+
+    try {
       // Actualizar el usuario en la base de datos con los valores recibidos
       await Usuario.update(
           {
