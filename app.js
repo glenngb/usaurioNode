@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const { conectarBD, sequelize } = require('./config/db');
 const usuarioRutas = require('./routes/usuarioRutas');
 const productoRutas = require('./routes/productoRutas');
+const categoriaRutas = require('./routes/categoriaRutas');
 
 
 dotenv.config();
@@ -36,7 +37,7 @@ app.get('/', (req, res) => {
 });
 app.use('/usuarios', usuarioRutas);
 app.use('/productos', productoRutas);
-
+app.use('/categorias', categoriaRutas);
 
 const PUERTO = process.env.PUERTO || 3000;
 app.listen(PUERTO, () => {

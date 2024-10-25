@@ -1,9 +1,10 @@
 const productoServicio = require('../services/productoServicio');
+const categoriaServicio = require('../services/categoriaServicio');
 const Producto = require('../models/Producto');
 
 const obtenerProductos = async (req, res) =>  {
     const productos = await productoServicio.obtenerTodosLosProductos();
-    res.render('producto/index', {productos});
+    res.render('productos/index', {productos});
 };
 
 const obtenerProducto = async (req, res) => {
