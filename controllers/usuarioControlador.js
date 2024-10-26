@@ -20,7 +20,7 @@ const crearUsuario = async (req, res) => {
    const ROLES = {
        ADMIN: 1,
        USER: 0,
-       VENDOR: 3
+       VENDOR: 2
     }
   // Convertir el rol a su valor numérico
     let rolNumerico
@@ -33,6 +33,30 @@ const crearUsuario = async (req, res) => {
     } else {
         return res.status(400).send('Rol inválido');
     }
+
+    // Crear un comprador (rol fijo de 0)
+const crearComprador = async (req, res) => {
+  const { nombre, rut, correo, pass } = req.body;
+
+  try {
+    await usuarioServicio.crearUsuario({
+      nombre,
+      rut,
+      correo,
+      pass,
+      rol: 0, // Rol fijo de comprador
+    });
+    res.redirect('/usuarios'); // debe redireccionar a la tienda
+  } catch (error) {
+    console.error('Error al crear el comprador:', error);
+    res.status(500).send('Error al crear el comprador');
+  }
+};
+
+// Mostrar formulario para crear un comprador
+const mostrarFormularioCrearComprador = (req, res) => {
+  res.render('usuario/crearComprador'); 
+};
 
 
 
@@ -104,6 +128,29 @@ const actualizarUsuario = async (req, res) => {
   }
 };
 
+// Crear un comprador (rol fijo de 0)
+const crearComprador = async (req, res) => {
+  const { nombre, rut, correo, pass } = req.body;
+
+  try {
+    await usuarioServicio.crearUsuario({
+      nombre,
+      rut,
+      correo,
+      pass,
+      rol: 0, // Rol fijo de comprador
+    });
+    res.redirect('/usuarios');
+  } catch (error) {
+    console.error('Error al crear el comprador:', error);
+    res.status(500).send('Error al crear el comprador');
+  }
+};
+
+// Mostrar formulario para crear un comprador
+const mostrarFormularioCrearComprador = (req, res) => {
+  res.render('usuario/crearComprador'); // Asegúrate de que la ruta sea correcta
+};
 
 const eliminarUsuario = async (req, res) => {
   const { id } = req.params; // Captura el ID del usuario desde la URL
@@ -129,7 +176,9 @@ module.exports = {
   obtenerUsuarios,
   obtenerUsuario,
   crearUsuario,
+  crearComprador,
+  mostrarFormularioCrearComprador,
   actualizarUsuario,
   eliminarUsuario,
-  mostrarFormularioEditarUsuario
+  mostrarFormularioEditarUsuario,
 };

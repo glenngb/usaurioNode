@@ -1,0 +1,30 @@
+doctype html
+html
+  head
+    title Crear Comprador
+    link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css')
+  body
+    .container
+      .row.justify-content-center.align-items-center
+        .col-md-6.mt-5
+          .card
+            .card-body
+              h1.text-center Crear Comprador
+              form(action='/usuarios/comprador', method='post')
+                .form-group
+                  label(for='nombre') Nombre:
+                  input(type='text', name='nombre', class='form-control', required)
+
+                .form-group
+                  label(for='rut') RUT:
+                  input(type='text', name='rut', class='form-control', required)
+
+                .form-group
+                  label(for='correo') Correo:
+                  input(type='email', name='correo', class='form-control', required)
+
+                .form-group
+                  label(for='pass') Contraseña:
+                  input(type='password', name='pass', class='form-control', required)
+
+                button(type='submit', class='btn btn-primary btn-block') Crear Comprador
