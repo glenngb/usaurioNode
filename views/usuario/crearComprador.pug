@@ -3,6 +3,36 @@ html
   head
     title Crear Comprador
     link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css')
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css")
+    script.
+      function validarContrasenas() {
+        const pass = document.getElementById('pass');
+        const passConfirm = document.getElementById('passConfirm');
+        const mensajeError = document.getElementById('mensajeError');
+
+        if (pass.value !== passConfirm.value) {
+          mensajeError.textContent = 'Las contraseñas no coinciden';
+          passConfirm.classList.add('is-invalid');
+          return false;
+        } else {
+          mensajeError.textContent = '';
+          passConfirm.classList.remove('is-invalid');
+          return true;
+        }
+      }
+
+      function togglePasswordVisibility(id, iconId) {
+        const passwordField = document.getElementById(id);
+        const icon = document.getElementById(iconId);
+        
+        if (passwordField.type === 'password') {
+          passwordField.type = 'text';
+          icon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+          passwordField.type = 'password';
+          icon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+      }
   body
     .container
       .row.justify-content-center.align-items-center
@@ -10,7 +40,7 @@ html
           .card
             .card-body
               h1.text-center Crear Comprador
-              form(action='/usuarios/comprador', method='post')
+              form(action='/usuarios/comprador', method='post', onsubmit='return validarContrasenas()')
                 .form-group
                   label(for='nombre') Nombre:
                   input(type='text', name='nombre', class='form-control', required)
@@ -25,6 +55,19 @@ html
 
                 .form-group
                   label(for='pass') Contraseña:
-                  input(type='password', name='pass', class='form-control', required)
+                  .input-group
+                    input(type='password', id='pass', name='pass', class='form-control', required)
+                    .input-group-append
+                      span(class='input-group-text', onclick="togglePasswordVisibility('pass', 'passIcon')")
+                        i#passIcon(class='fas fa-eye')
+
+                .form-group
+                  label(for='passConfirm') Confirmar Contraseña:
+                  .input-group
+                    input(type='password', id='passConfirm', name='passConfirm', class='form-control', required)
+                    .input-group-append
+                      span(class='input-group-text', onclick="togglePasswordVisibility('passConfirm', 'passConfirmIcon')")
+                        i#passConfirmIcon(class='fas fa-eye')
+                  small#mensajeError.text-danger
 
                 button(type='submit', class='btn btn-primary btn-block') Crear Comprador

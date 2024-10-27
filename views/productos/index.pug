@@ -3,72 +3,151 @@ html
   head
     title Productos
     link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css")
-    // FontAwesome CDN
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css")
-    script(src="https://code.jquery.com/jquery-3.5.1.min.js")  // Usar la versión completa de jQuery
+    link(rel='stylesheet', href='/css/style.css')
+    script(src="https://code.jquery.com/jquery-3.5.1.min.js")
     script(src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js")
     script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
-    
-  body
-    .container
-      h1.mt-5 Lista de Productos
-      
-      // Tabla de productos con Bootstrap
-      table.table.table-striped.mt-4
-        thead
-          tr
-            th Nombre
-            th Descripción
-            th Precio
-            th Inventario
-            th Categoría
-            th Acción
-        tbody
-          each producto in productos
-            tr
-              td #{producto.nombre}
-              td #{producto.descripcion}
-              td #{producto.precio} $
-              td #{producto.inventario}
-              td #{producto.categoria}
-              td
-                button.btn.btn-warning.btn-sm(type="button" data-toggle="modal" data-target="#editarProductoModal" data-id=producto.id data-nombre=producto.nombre data-descripcion=producto.descripcion data-precio=producto.precio data-inventario=producto.inventario data-categoria=producto.categoria)
-                  i.fas.fa-edit
-                button.btn.btn-danger.btn-sm.btn-eliminar(type="button" data-id=producto.id)
-                  i.fas.fa-trash-alt
 
-    // Modal para editar producto
-    div.modal.fade(id="editarProductoModal" tabindex="-1" role="dialog" aria-labelledby="editarProductoModalLabel" aria-hidden="true")
-      .modal-dialog(role="document")
-        .modal-content
-          .modal-header
-            h5.modal-title#editarProductoModalLabel Editar Producto
-            button(type="button" class="close" data-dismiss="modal" aria-label="Close")
-              span(aria-hidden="true") &times;
-          .modal-body
-            form(action="/productos" method="POST" id="formEditarProducto")
-              input#editar-id(type="hidden" name="id")
-              .form-group
-                label(for="editar-nombre") Nombre:
-                input.form-control#editar-nombre(type="text" name="nombre" required)
-              .form-group
-                label(for="editar-descripcion") Descripción:
-                input.form-control#editar-descripcion(type="text" name="descripcion" required)
-              .form-group
-                label(for="editar-precio") Precio:
-                input.form-control#editar-precio(type="number" step="0.01" name="precio" required)
-              .form-group
-                label(for="editar-inventario") Inventario:
-                input.form-control#editar-inventario(type="number" name="inventario" required)
-              .form-group
-                label(for="editar-categoria") Categoría:
-                input.form-control#editar-categoria(type="text" name="categoria" required)
-              button.btn.btn-primary(type="submit") Actualizar Producto
+  body
+    // Navbar
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.fixed-top
+      a.navbar-brand(href="#") Mi Sitio
+      button.navbar-toggler(type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation")
+        span.navbar-toggler-icon
+      .collapse.navbar-collapse#navbarNav
+        ul.navbar-nav.ml-auto
+          li.nav-item.active
+          a.nav-link(href="#") Bienvenido: User
+
+    #wrapper
+      // Sidebar
+      div#sidebar-wrapper.bg-dark
+        ul.nav.flex-column
+          li.nav-item
+            a.nav-link.text-white(href="dashboard")
+              i.fas.fa-tachometer-alt.mr-2
+              | Dashboard
+          li.nav-item
+            a.nav-link.text-white(href="/productos")
+              i.fas.fa-box.mr-2
+              | Productos
+          li.nav-item
+            a.nav-link.text-white(href="/categorias")
+              i.fas.fa-list.mr-2
+              | Categorías
+          li.nav-item
+            a.nav-link.text-white(href="/usuarios")
+              i.fas.fa-users.mr-2
+              | Usuarios
+          // Agrega más enlaces según sea necesario
+
+      // Contenido Principal
+      #page-content-wrapper
+        .container.mt-5.mb-5
+          .row.justify-content-center
+            .col-lg-8.col-md-10
+              h1.text-center Lista de productos
+
+              .table-responsive.mt-4
+                table.table.table-striped
+                  thead
+                    tr
+                      th Nombre
+                      th Descripción
+                      th Precio
+                      th Inventario
+                      th Categoría
+                      th Acción
+                  tbody
+                    each producto in productos
+                      tr
+                        td #{producto.nombre}
+                        td #{producto.descripcion}
+                        td #{producto.precio} $
+                        td #{producto.inventario}
+                        td #{producto.categoria}
+                        td
+                          button.btn.btn-warning.btn-sm(type="button" data-toggle="modal" data-target="#editarProductoModal" data-id=producto.id data-nombre=producto.nombre data-descripcion=producto.descripcion data-precio=producto.precio data-inventario=producto.inventario data-categoria=producto.categoria)
+                            i.fas.fa-edit
+                          button.btn.btn-danger.btn-sm.btn-eliminar(type="button" data-id=producto.id)
+                            i.fas.fa-trash-alt
+
+          div.modal.fade(id="editarProductoModal" tabindex="-1" role="dialog" aria-labelledby="editarProductoModalLabel" aria-hidden="true")
+            .modal-dialog.modal-dialog-centered(role="document")
+              .modal-content
+                .modal-header
+                  h5.modal-title#editarProductoModalLabel Editar Producto
+                  button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                    span(aria-hidden="true") &times;
+                .modal-body
+                  form(action="/productos" method="POST" id="formEditarProducto")
+                    input#editar-id(type="hidden" name="id")
+                    .form-group
+                      label(for="editar-nombre") Nombre:
+                      input.form-control#editar-nombre(type="text" name="nombre" required)
+                    .form-group
+                      label(for="editar-descripcion") Descripción:
+                      input.form-control#editar-descripcion(type="text" name="descripcion" required)
+                    .form-group
+                      label(for="editar-precio") Precio:
+                      input.form-control#editar-precio(type="number" step="0.01" name="precio" required)
+                    .form-group
+                      label(for="editar-inventario") Inventario:
+                      input.form-control#editar-inventario(type="number" name="inventario" required)
+                    .form-group
+                      label(for="editar-categoria") Categoría:
+                      input.form-control#editar-categoria(type="text" name="categoria" required)
+                    button.btn.btn-primary(type="submit") Actualizar Producto
+
+          h2.mt-5.text-center Crear un nuevo producto
+          .container.mt-3.mb-5
+            .row.justify-content-center
+              .col-lg-6.col-md-8
+                // Formulario con borde, esquinas redondeadas y sombra
+                form(action="/productos" method="POST" class="p-4 border rounded shadow-sm")
+                  .form-group
+                    label(for="nombre") Nombre:
+                    input.form-control(type="text" name="nombre" required)
+
+                  .form-group
+                    label(for="descripcion") Descripción:
+                    input.form-control(type="text" name="descripcion" required)
+
+                  .form-group
+                    label(for="precio") Precio:
+                    input.form-control(type="number" step="0.01" name="precio" required)
+
+                  .form-group
+                    label(for="inventario") Inventario:
+                    input.form-control(type="number" name="inventario" required)
+
+                  .form-group
+                    label(for="categoria") Categoría:
+                    input.form-control(type="text" name="categoria" required)
+
+                  button.btn.btn-primary(type="submit") Crear Producto
+
+    // Botón de menú
+    button#menu-toggle.menu-toggle
+      i.fas.fa-bars
+
+    // Scripts
+    script(src="https://code.jquery.com/jquery-3.5.1.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11")
+
+    // Sidebar toggle script
+    script.
+      document.getElementById("menu-toggle").addEventListener("click", function() {
+        document.getElementById("wrapper").classList.toggle("toggled");
+      });
 
     script.
       $('#editarProductoModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // Botón que activó el modal
+        var button = $(event.relatedTarget);
         var id = button.data('id');
         var nombre = button.data('nombre');
         var descripcion = button.data('descripcion');
@@ -87,76 +166,49 @@ html
         modal.find('form').attr('action', `/productos/${id}/actualizar`);
       });
 
-    h2.mt-5 Crear un nuevo producto
-    form(action="/productos" method="POST" class="mt-3")
-      .form-group
-        label(for="nombre") Nombre:
-        input.form-control(type="text" name="nombre" required)
+    script.
+      document.addEventListener('DOMContentLoaded', function () {
+        const eliminarBtns = document.querySelectorAll('.btn-eliminar');
 
-      .form-group
-        label(for="descripcion") Descripción:
-        input.form-control(type="text" name="descripcion" required)
+        eliminarBtns.forEach(btn => {
+          btn.addEventListener('click', function () {
+            const productId = this.getAttribute('data-id');
 
-      .form-group
-        label(for="precio") Precio:
-        input.form-control(type="number" step="0.01" name="precio" required)
-
-      .form-group
-        label(for="inventario") Inventario:
-        input.form-control(type="number" name="inventario" required)
-
-      .form-group
-        label(for="categoria") Categoría:
-        input.form-control(type="text" name="categoria" required)
-
-      button.btn.btn-primary(type="submit") Crear Producto
-
-script.
-  document.addEventListener('DOMContentLoaded', function () {
-    const eliminarBtns = document.querySelectorAll('.btn-eliminar');
-
-    eliminarBtns.forEach(btn => {
-      btn.addEventListener('click', function () {
-        const productId = this.getAttribute('data-id'); // Obtener el ID del usuario
-
-        // Mostrar la alerta de confirmación
-        Swal.fire({
-          title: '¿Estás seguro?',
-          text: "No podrás revertir esta acción",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Sí, eliminar',
-          cancelButtonText: 'Cancelar'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            // Si el usuario confirma, hacer la petición de eliminación
-            fetch(`/productos/${productId}/eliminar`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            })
-            .then(response => response.json())
-            .then(data => {
-              if (data.success) {
-                Swal.fire(
-                  'Eliminado!',
-                  'El producto ha sido eliminado.',
-                  'success'
-                );
-                location.reload();
-                 
-              } else {
-                Swal.fire('Error', 'No se pudo eliminar el producto.', 'error');
+            Swal.fire({
+              title: '¿Estás seguro?',
+              text: "No podrás revertir esta acción",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Sí, eliminar',
+              cancelButtonText: 'Cancelar'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                fetch(`/productos/${productId}/eliminar`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                })
+                .then(response => response.json())
+                .then(data => {
+                  if (data.success) {
+                    Swal.fire(
+                      'Eliminado!',
+                      'El producto ha sido eliminado.',
+                      'success'
+                    );
+                    location.reload();
+                  } else {
+                    Swal.fire('Error', 'No se pudo eliminar el producto.', 'error');
+                  }
+                })
+                .catch(error => {
+                  Swal.fire('Error', 'Hubo un problema al eliminar el producto.', 'error');
+                });
               }
-            })
-            .catch(error => {
-              Swal.fire('Error', 'Hubo un problema al eliminar el producto.', 'error');
             });
-          }
+          });
         });
       });
-    });
-  });

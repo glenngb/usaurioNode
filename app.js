@@ -35,6 +35,10 @@ app.set('views', './views');
 app.get('/', (req, res) => {
   res.render('index', { titulo: 'Bienvenido a la Tienda' });
 });
+// Ruta para renderizar el archivo Pug
+app.get('/dashboard', (req, res) => {
+  res.render('dashboard/index'); // La ruta relativa a la carpeta de vistas
+});
 app.use('/usuarios', usuarioRutas);
 app.use('/productos', productoRutas);
 app.use('/categorias', categoriaRutas);

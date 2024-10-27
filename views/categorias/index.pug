@@ -19,22 +19,29 @@ html
       .collapse.navbar-collapse#navbarNav
         ul.navbar-nav.ml-auto
           li.nav-item.active
-            a.nav-link(href="#") Xxxx
-          li.nav-item
-            a.nav-link(href="#") Xxxx
-          li.nav-item
-            a.nav-link(href="#") Xxxx
-          li.nav-item
-            a.nav-link(href="#") Xxxx
+          a.nav-link(href="#") Bienvenido: User
 
     #wrapper
       // Sidebar
       div#sidebar-wrapper.bg-dark
         ul.nav.flex-column
           li.nav-item
-            a.nav-link.text-white(href="#") 
+            a.nav-link.text-white(href="dashboard") 
               i.fas.fa-tachometer-alt.mr-2
               |  Dashboard
+          li.nav-item
+            a.nav-link.text-white(href="/productos") 
+              i.fas.fa-box.mr-2
+              |  Productos
+          li.nav-item
+            a.nav-link.text-white(href="/categorias") 
+              i.fas.fa-list.mr-2
+              |  Categorías
+          li.nav-item
+            a.nav-link.text-white(href="/usuarios") 
+              i.fas.fa-users.mr-2
+              |  Usuarios
+          // Agrega más enlaces según sea necesario
 
       // Contenido de la página
       div#page-content-wrapper
@@ -44,7 +51,7 @@ html
               h1.mt-5.text-center Lista de Categorías
 
               // Tabla de categorías con Bootstrap
-              table.table.table-striped.mt-4
+              table.table.table-bordered.table-striped.mt-4
                 thead
                   tr
                     th Nombre
@@ -81,8 +88,8 @@ html
                         button.btn.btn-primary(type="submit") Actualizar Categoría
 
               // Formulario para crear una nueva categoría
-              h2.mt-5 Crear una nueva categoría
-              form(action="/categorias" method="POST" class="mt-3")
+              h2.mt-5.text-center Crear una nueva categoría
+              form(action="/categorias" method="POST" class="mt-3 p-4 border rounded shadow-sm bg-light")
                 .form-group
                   label(for="nombre") Nombre:
                   input.form-control(type="text" name="nombre" required)
