@@ -1,0 +1,27 @@
+doctype html
+html
+  head
+    title Registro
+  body
+    h1 Registro
+    form(action="/registro", method="POST")
+      div
+        label(for="nombre") Nombre:
+        input(type="text", name="nombre", required)
+      div
+        label(for="rut") RUT:
+        input(type="text", name="rut", required)
+      div
+        label(for="correo") Correo:
+        input(type="email", name="correo", required)
+      div
+        label(for="pass") Contraseña:
+        input(type="password", name="pass", required)
+      div
+        label(for="rol") Rol:
+        select(name="rol")
+          option(value="USER") Usuario
+          
+      div
+        button(type="submit") Registrarse
+    a(href="/login") Ya tengo cuenta. Iniciar sesión

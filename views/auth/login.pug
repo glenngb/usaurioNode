@@ -1,0 +1,14 @@
+doctype html
+html
+    head
+        title Iniciar Sesión
+    body
+        h1 Iniciar Sesión
+        form(action="/auth/login", method="post")
+            div
+                label(for="correo") Correo:
+                input(type="email" name="correo" required)
+            div
+                label(for="pass") Contraseña:
+                input(type="password" name="pass" required)
+            button(type="submit") Iniciar Sesión

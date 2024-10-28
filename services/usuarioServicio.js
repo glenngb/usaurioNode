@@ -46,10 +46,15 @@ const eliminarUsuario = async (id) => {
       throw error;
   }
 };
+const obtenerUsuarioPorCorreo = async (correo) => {
+  return await Usuario.findOne({ where: { correo } });
+};
 
+// Exportar el nuevo método
 module.exports = {
   obtenerTodosLosUsuarios,
   obtenerUsuarioPorId,
+  obtenerUsuarioPorCorreo, // Nueva función
   crearUsuario,
   actualizarUsuario,
   eliminarUsuario,
