@@ -1,5 +1,5 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+const session = require('express-session');
 const dotenv = require('dotenv');
 const { conectarBD, sequelize } = require('./config/db');
 const usuarioRutas = require('./routes/usuarioRutas');
@@ -19,9 +19,17 @@ sequelize.sync().then(() => {
   console.log('Modelos sincronizados con la base de datos.');
 });
 
+// Configura la sesión antes de las rutas
+app.use(session({
+    secret: 'tuSecreto',  // Cambia 'tuSecreto' por una cadena segura
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false } // Cambia a true si usas HTTPS
+}));
+
 // Middleware
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 // Sirviendo archivos estáticos desde la carpeta 'public'
 app.use(express.static('public'));
@@ -35,7 +43,6 @@ app.get('/', (req, res) => {
   res.render('index', { titulo: 'Bienvenido a la Tienda' });
 });
 
-// Ruta para renderizar el archivo Pug
 app.get('/dashboard', (req, res) => {
   res.render('dashboard/index'); // La ruta relativa a la carpeta de vistas
 });
