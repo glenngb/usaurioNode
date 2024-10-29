@@ -2,7 +2,6 @@ const Usuario = require('../models/Usuario');
 const usuarioServicio = require('../services/usuarioServicio');
 const bcrypt = require('bcrypt');
 
-
 const mostrarFormularioLogin = (req, res) => {
     res.render('auth/login');
 };
@@ -14,26 +13,29 @@ const iniciarSesion = async (req, res) => {
         const usuario = await Usuario.findOne({ where: { correo } });
 
         if (!usuario) {
-            return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+            // Redirige al formulario de login con un mensaje de error
+            return res.status(404).render('auth/login', { mensaje: 'Usuario no encontrado' });
         }
 
         const contrasenaValida = await bcrypt.compare(pass, usuario.pass);
 
         if (!contrasenaValida) {
-            return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
+            // Redirige al formulario de login con un mensaje de error
+            return res.status(401).render('auth/login', { mensaje: 'Contraseña incorrecta' });
         }
 
-        req.session.usuarioId = usuario.id; // Asegúrate de que req.session esté definido
-        return res.status(200).json({ mensaje: 'Inicio de sesión exitoso' });
+        // Si el inicio de sesión es exitoso, guarda el ID del usuario en la sesión
+        req.session.usuarioId = usuario.id; // Asegúrate de que req.session esté definido correctamente
+
+        // Redirige a la vista 'exito.pug'
+        return res.render('auth/exito', { titulo: 'Inicio de Sesión Exitoso' });
 
     } catch (error) {
         console.error("Error al iniciar sesión:", error);
-        return res.status(500).json({ mensaje: 'Error interno del servidor' });
+        // Redirige al formulario de login con un mensaje de error genérico
+        return res.status(500).render('auth/login', { mensaje: 'Error interno del servidor' });
     }
 };
-
-
-
 
 module.exports = {
     mostrarFormularioLogin,

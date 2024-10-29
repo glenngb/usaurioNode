@@ -2,6 +2,40 @@ doctype html
 html
     head
         title Éxito
+        link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css")
+        style.
+            .success-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                background-color: #f0f9ff;
+                text-align: center;
+            }
+            .success-card {
+                background: #fff;
+                padding: 2rem;
+                border-radius: 8px;
+                box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            }
+            .success-icon {
+                font-size: 4rem;
+                color: #28a745;
+            }
+            .btn-dashboard {
+                background-color: #28a745;
+                color: white;
+                font-size: 1.2rem;
+            }
+            .btn-dashboard:hover {
+                background-color: #218838;
+                color: white;
+            }
     body
-        h1 ¡Login exitoso!
-        p Bienvenido a tu dashboard.
+        .success-container
+            .success-card
+                i(class="fas fa-check-circle success-icon")
+                h1.text-success ¡Login Exitoso!
+                p Bienvenido a tu dashboard. Te has autenticado correctamente.
+                p Haz clic en el botón de abajo para continuar.
+                a.btn.btn-dashboard(href="/dashboard") Ir a Dashboard
