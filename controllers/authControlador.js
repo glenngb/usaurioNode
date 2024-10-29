@@ -2,10 +2,6 @@ const Usuario = require('../models/Usuario');
 const usuarioServicio = require('../services/usuarioServicio');
 const bcrypt = require('bcrypt');
 
-const mostrarFormularioRegistro = (req, res) => {
-    res.render('auth/registro');
-};
-
 
 const mostrarFormularioLogin = (req, res) => {
     res.render('auth/login');
@@ -40,7 +36,6 @@ const iniciarSesion = async (req, res) => {
 
 
 module.exports = {
-    mostrarFormularioRegistro,
     mostrarFormularioLogin,
     iniciarSesion,
 };

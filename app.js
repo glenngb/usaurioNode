@@ -21,7 +21,7 @@ sequelize.sync().then(() => {
 
 // Configura la sesión antes de las rutas
 app.use(session({
-    secret: 'tuSecreto',  // Cambia 'tuSecreto' por una cadena segura
+    secret: 'tuSecreto', 
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false } // Cambia a true si usas HTTPS
@@ -44,7 +44,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/dashboard', (req, res) => {
-  res.render('dashboard/index'); // La ruta relativa a la carpeta de vistas
+  res.render('dashboard/index');
 });
 
 // Rutas de usuarios, productos y categorías
