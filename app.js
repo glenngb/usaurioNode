@@ -7,6 +7,8 @@ const productoRutas = require('./routes/productoRutas');
 const categoriaRutas = require('./routes/categoriaRutas');
 const authRutas = require('./routes/authrutas'); // Importar las rutas de autenticación
 
+
+
 dotenv.config();
 
 const app = express();
@@ -52,6 +54,8 @@ app.use('/usuarios', usuarioRutas);
 app.use('/productos', productoRutas);
 app.use('/categorias', categoriaRutas);
 app.use('/', authRutas); // Rutas de autenticación
+// Usar las rutas de autenticación
+
 
 const PUERTO = process.env.PUERTO || 3000;
 app.listen(PUERTO, () => {

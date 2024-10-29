@@ -11,6 +11,11 @@ router.get('/login', authControlador.mostrarFormularioLogin);
 // Procesar el inicio de sesión
 router.post('/login', authControlador.iniciarSesion);
 
+router.get('/login', (req, res) => {
+    res.render('auth/login', { titulo: 'Iniciar Sesión' });
+  });
+  
+
 
 
 
