@@ -49,6 +49,10 @@ app.get('/dashboard', (req, res) => {
   res.render('dashboard/index');
 });
 
+app.get('/auth', (req, res) => {
+  res.render('auth/index');
+});
+
 // Rutas de usuarios, productos y categorías
 app.use('/usuarios', usuarioRutas);
 app.use('/productos', productoRutas);
