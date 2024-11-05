@@ -13,32 +13,21 @@ const obtenerProducto = async (req, res) => {
 };
 
 const crearProducto = async (req, res) => {
-    const { id, nombre, descripcion, precio, inventario, categoria } = req.body;
+    const { nombre, descripcion, precio, inventario, categoria } = req.body;
+    const imagen = req.file ? req.file.path : null; // Obtiene la ruta de la imagen
 
-     if (!nombre || !descripcion || !precio || !inventario || !categoria) {
-         return res.status(400).send('Todos los campos son obligatorios');
-     }
-     if (precio < 0 || inventario < 0) {
-         return res.status(400).send('El precio y el inventario deben ser mayores o iguales a cero');
-     }
-
-    try {
-        // Crear el producto en la base de datos
-        await productoServicio.crearProducto({
-            id,
-            nombre,
-            descripcion,
-            precio,
-            inventario,
-            categoria,
-        });
-
+ // Crear el producto en la base de datos
+       
+  await Producto.create({
+    nombre,
+    descripcion,
+    precio,
+    inventario,
+    categoria,
+    imagen, // Guarda la ruta de la imagen
+  });
         // Redirigir a la lista de productos después de la creación
         res.redirect('/productos');
-    } catch (error) {
-        console.error('Error al crear el producto:', error);
-        res.status(500).send('Error al crear el producto');
-    }
 };
 
 
@@ -46,13 +35,8 @@ const crearProducto = async (req, res) => {
 // Controlador para actualizar el producto
 const actualizarProducto = async (req, res) => {
     const { id, nombre, descripcion, precio, inventario, categoria } = req.body;
+    const imagen = req.file ? req.file.path : null; // Obtiene la ruta de la imagen
 
-     if (!nombre || !descripcion || !precio || !inventario || !categoria) {
-         return res.status(400).send('Todos los campos son obligatorios');
-     }
-     if (precio < 0 || inventario < 0) {
-         return res.status(400).send('El precio y el inventario deben ser mayores o iguales a cero');
-     }
 
     try {
         // Actualizar el producto en la base de datos con los valores recibidos
@@ -63,6 +47,7 @@ const actualizarProducto = async (req, res) => {
                 precio,
                 inventario,
                 categoria,
+                imagen, // Guarda la ruta de la imagen
             },
             { where: { id } }
         );

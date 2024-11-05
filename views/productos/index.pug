@@ -19,7 +19,7 @@ html
       .collapse.navbar-collapse#navbarNav
         ul.navbar-nav.ml-auto
           li.nav-item.active
-          a.nav-link(href="#") Bienvenido: User
+            a.nav-link(href="#") Bienvenido: User
 
     #wrapper
       // Sidebar
@@ -59,6 +59,7 @@ html
                       th Precio
                       th Inventario
                       th Categoría
+                      th Imagen
                       th Acción
                   tbody
                     each producto in productos
@@ -68,6 +69,9 @@ html
                         td #{producto.precio} $
                         td #{producto.inventario}
                         td #{producto.categoria}
+                        td 
+                           button(type="button" class="btn-img" data-toggle="modal" data-target="#imagenModal" data-src=`${producto.imagen}`)
+                            img(src=`${producto.imagen}` alt="" width="50" height="auto")
                         td
                           button.btn.btn-warning.btn-sm(type="button" data-toggle="modal" data-target="#editarProductoModal" data-id=producto.id data-nombre=producto.nombre data-descripcion=producto.descripcion data-precio=producto.precio data-inventario=producto.inventario data-categoria=producto.categoria)
                             i.fas.fa-edit
@@ -82,7 +86,7 @@ html
                   button(type="button" class="close" data-dismiss="modal" aria-label="Close")
                     span(aria-hidden="true") &times;
                 .modal-body
-                  form(action="/productos" method="POST" id="formEditarProducto")
+                  form(action="/productos" method="POST" enctype="multipart/form-data" class="mt-3")
                     input#editar-id(type="hidden" name="id")
                     .form-group
                       label(for="editar-nombre") Nombre:
@@ -99,6 +103,9 @@ html
                     .form-group
                       label(for="editar-categoria") Categoría:
                       input.form-control#editar-categoria(type="text" name="categoria" required)
+                    .form-group
+                      label(for="imagen") Imagen:
+                      input.form-control(type="file" name="imagen" accept="image/*")
                     button.btn.btn-primary(type="submit") Actualizar Producto
 
           h2.mt-5.text-center Crear un nuevo producto
@@ -106,27 +113,25 @@ html
             .row.justify-content-center
               .col-lg-6.col-md-8
                 // Formulario con borde, esquinas redondeadas y sombra
-                form(action="/productos" method="POST" class="p-4 border rounded shadow-sm")
+                form(action="/productos" method="POST" enctype="multipart/form-data" class="mt-3")
                   .form-group
                     label(for="nombre") Nombre:
                     input.form-control(type="text" name="nombre" required)
-
                   .form-group
                     label(for="descripcion") Descripción:
                     input.form-control(type="text" name="descripcion" required)
-
                   .form-group
                     label(for="precio") Precio:
                     input.form-control(type="number" step="0.01" name="precio" required)
-
                   .form-group
                     label(for="inventario") Inventario:
                     input.form-control(type="number" name="inventario" required)
-
                   .form-group
                     label(for="categoria") Categoría:
                     input.form-control(type="text" name="categoria" required)
-
+                  .form-group
+                    label(for="imagen") imagen:
+                    input.form-control(type="file" name="imagen" accept="image/*")
                   button.btn.btn-primary(type="submit") Crear Producto
 
     // Botón de menú
@@ -212,3 +217,27 @@ html
           });
         });
       });
+// Agrega el modal para la imagen en el cuerpo del HTML
+div.modal.fade#imagenModal(tabindex="-1" role="dialog" aria-labelledby="imagenModalLabel" aria-hidden="true")
+  .modal-dialog.modal-dialog-centered(role="document")
+    .modal-content
+      .modal-header
+        h5.modal-title#imagenModalLabel Imagen del Producto
+        button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+          span(aria-hidden="true") &times;
+      .modal-body
+        img#imagenModalSrc(src="" alt="Imagen del Producto" class="img-fluid")
+
+// Script para manejar el clic en la imagen y mostrarla en el modal
+script.
+  document.addEventListener('DOMContentLoaded', function () {
+    const imgButtons = document.querySelectorAll('.btn-img');
+
+    imgButtons.forEach(btn => {
+      btn.addEventListener('click', function () {
+        const imgSrc = this.getAttribute('data-src');
+        document.getElementById('imagenModalSrc').src = imgSrc;
+      });
+    });
+  });
+

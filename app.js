@@ -35,7 +35,7 @@ app.use(express.json());
 
 // Sirviendo archivos estáticos desde la carpeta 'public'
 app.use(express.static('public'));
-
+app.use('/uploads', express.static('uploads'));
 // Configurar Pug como motor de vistas
 app.set('view engine', 'pug');
 app.set('views', './views');
