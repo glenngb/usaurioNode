@@ -45,7 +45,7 @@ const iniciarSesion = async (req, res) => {
         } else if (usuario.rol === 2) { // VENDOR
             return res.redirect('/dashboard');
         } else { // USER
-            return res.redirect('/auth');
+            return res.redirect('/tienda');
         }
 
     } catch (error) {

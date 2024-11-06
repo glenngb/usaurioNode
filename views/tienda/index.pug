@@ -1,0 +1,36 @@
+doctype html
+html
+  head
+    title Carrito de Compras
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css')
+    script(src='https://code.jquery.com/jquery-3.5.1.slim.min.js')
+    script(src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js')
+    script(src='/services/scrypt.js') // Cambia la ruta al script según tu estructura
+
+  body
+    .container
+      h1.text-center.my-4 Carrito de Compras
+
+      
+
+          // Información del usuario
+          #user-info.text-center.mt-3
+
+      // Sección de productos
+      h2.text-center.my-4 Productos
+      #items.row
+
+      // Sección del carrito
+      h2.text-center.my-4 Carrito
+      #carrito
+        .list-group
+          // Los productos del carrito se agregarán aquí mediante JavaScript
+
+      // Total y botones de acción
+      h3.text-center Total: <span id="total">0 CLP</span>
+      .text-center
+        button#boton-vaciar.btn.btn-danger.mt-3 Vaciar Carrito
+        button#boton-pago.btn.btn-success.mt-3 Realizar Pago
+
+    // Aquí puedes incluir un script adicional si necesitas
