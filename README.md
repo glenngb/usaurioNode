@@ -7,5 +7,4 @@
 ```
 Glenn García
 Iván Rodríguez M.
-Aarón Ulloa
 ```
