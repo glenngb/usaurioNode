@@ -47,10 +47,10 @@ html
               li.nav-item
                 a.nav-link(href="#") Hola: #{usuario.correo}
               li.nav-item
-                a.nav-link.text-black(href="/cart")
-                  i.fas.fa-cart-shopping.mr-2
-                  span#cart-count.badge.badge-pill.badge-primary 0 // Contador de productos en el carrito
-                  | Carrito
+                a.nav-link.text-black(href="#", data-toggle="modal", data-target="#cartModal") 
+                i.fas.fa-cart-shopping.mr-2
+                  span#cart-count.badge.badge-pill.badge-primary 0
+                    | Carrito
               li.nav-item
                 a.nav-link.text-red(href="/logout") 
                   i.fas.fa-right-from-bracket.mr-2
