@@ -3,6 +3,7 @@ body {
   display: flex;
   flex-direction: column;
   padding-top: 56px;
+  background: #fcfcfc;
 }
 
 /* Wrapper de contenido y sidebar */
@@ -72,3 +73,19 @@ body {
 #sidebar-wrapper .nav-link:hover {
   color: #ffc107 !important; /* Cambia a un color claro al pasar el cursor */
 }
+
+/* Pagina de tienda*/
+.product-img-container {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.product-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Mantiene la relación de aspecto sin distorsionar la imagen */
+}
+

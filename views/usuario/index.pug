@@ -25,7 +25,7 @@ html
           li.nav-item
             a.nav-link(href="#") Xxxx
           li.nav-item
-            a.nav-link(href="#") Xxxx
+            a.nav-link(href="#") Bienvenido:#{usuario.nombre}
 
     #wrapper
       // Sidebar
@@ -47,6 +47,10 @@ html
             a.nav-link.text-white(href="/usuarios")
               i.fas.fa-users.mr-2
               | Usuarios
+          li.nav-item
+            a.nav-link.text-red(href="/logout") 
+              i.fas.fa-right-from-bracket.mr-2
+              |  Cerrar Sesión
           // Agrega más enlaces según sea necesario
 
       // Contenido Principal
@@ -55,7 +59,10 @@ html
           .row.justify-content-center
             .col-lg-8.col-md-10
               h1.text-center Lista de usuarios
-              
+          // Botón para abrir el modal de creación de usuario
+          button.btn.btn-primary.mt-3(type="button" data-toggle="modal" data-target="#crearUsuarioModal")
+            i.fas.fa-user-plus.mr-2
+            | Crear Usuario    
           // Tabla de usuarios con Bootstrap y los iconos de editar y eliminar
           table.table.table-striped.mt-4
             thead
@@ -77,34 +84,46 @@ html
                       i.fas.fa-edit
                     button.btn.btn-danger.btn-sm.btn-eliminar(type="button" data-id=usuario.id)
                       i.fas.fa-trash-alt
+          
 
-          h2.mt-5 Crear un nuevo usuario
-          form(action="/usuarios" method="POST" class="mt-3")
-            .form-group
-              label(for="nombre") Nombre:
-              input.form-control(type="text" name="nombre" id="nombre" required)
-              
-            .form-group
-              label(for="rut") RUT:
-              input.form-control(type="text" name="rut" id="rut" placeholder="12.345.678-9")
+      // Modal para Crear Usuario
+      div.modal.fade(id="crearUsuarioModal" tabindex="-1" role="dialog" aria-labelledby="crearUsuarioModalLabel" aria-hidden="true")
+        div.modal-dialog(role="document")
+          div.modal-content
+            div.modal-header
+              h5.modal-title#crearUsuarioModalLabel Crear Usuario
+              button.close(type="button" data-dismiss="modal" aria-label="Close")
+                span(aria-hidden="true") &times;
+            div.modal-body
+              form(action="/usuarios" method="POST")
+                .form-group
+                  label(for="nombre") Nombre:
+                  input.form-control(type="text" name="nombre" id="nombre" required)
+                  
+                .form-group
+                  label(for="rut") RUT:
+                  input.form-control(type="text" name="rut" id="rut" placeholder="12.345.678-9")
 
-            .form-group
-              label(for="correo") Correo:
-              input.form-control(type="email" name="correo" id="correo" required placeholder="nombre@dominio.com")
+                .form-group
+                  label(for="correo") Correo:
+                  input.form-control(type="email" name="correo" id="correo" required placeholder="nombre@dominio.com")
 
-            .form-group
-              label(for="pass") Clave:
-              input.form-control(type="password" name="pass" id="pass")
-              
-            .form-group
-              label(for="rol") Rol:
-              select.form-control(name="rol" id="rol" required)
-                option(value="ADMIN") Admin
-                option(value="USER") Comprador
-                option(value="VENDOR") Vendedor
+                .form-group
+                  label(for="pass") Clave:
+                  input.form-control(type="password" name="pass" id="pass")
+                  
+                .form-group
+                  label(for="rol") Rol:
+                  select.form-control(name="rol" id="rol" required)
+                    option(value="ADMIN") Admin
+                    option(value="USER") Comprador
+                    option(value="VENDOR") Vendedor
 
-            button.btn.btn-primary(type="submit") Crear Usuario
+                button.btn.btn-primary(type="submit") Crear Usuario
+            div.modal-footer
+              button.btn.btn-secondary(type="button" data-dismiss="modal") Cerrar
 
+         
       // Botón de menú
       button#menu-toggle.menu-toggle
         i.fas.fa-bars

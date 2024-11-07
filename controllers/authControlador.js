@@ -12,7 +12,9 @@ const mostrarFormularioLogin = (req, res) => {
 // Maneja el inicio de sesión
 const iniciarSesion = async (req, res) => {
     const { correo, pass } = req.body;
-
+    req.session.usuario = {
+        correo: correo
+    }
     try {
         // Busca al usuario por correo
         const usuario = await Usuario.findOne({ where: { correo } });
@@ -28,16 +30,20 @@ const iniciarSesion = async (req, res) => {
             // Si la contraseña no es válida, redirige al login con mensaje de error
             return res.status(401).render('auth/login', { mensaje: 'Contraseña incorrecta' });
         }
-
+   
         // Genera un token JWT con los datos del usuario
         const token = jwt.sign(
             { id: usuario.id, nombre: usuario.nombre, correo: usuario.correo },
             JWT_SECRET,
             { expiresIn: '1h' } // El token expira en 1 hora
+
+       
         );
 
         // Guarda el token en una cookie
-        res.cookie('token', token, { httpOnly: true, secure: true, maxAge: 3600000 }); // 1 hora
+        res.cookie('token', token, { httpOnly: true, secure: false, maxAge: 3600000 }); // 1 hora
+ 
+
 
         // Redirige según el rol del usuario
         if (usuario.rol === 1) { // ADMIN

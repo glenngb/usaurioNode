@@ -1,36 +1,74 @@
 doctype html
 html
   head
-    title Carrito de Compras
-    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css')
-    script(src='https://code.jquery.com/jquery-3.5.1.slim.min.js')
-    script(src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js')
-    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js')
-    script(src='/services/scrypt.js') // Cambia la ruta al script según tu estructura
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    title Productos - Tienda
+    // Enlace a Bootstrap 4.5.2
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css")
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css")
+    link(rel='stylesheet' href='/css/style.css')
+    
+    style.
+      .product-img-container {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .product-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Mantiene la relación de aspecto sin distorsionar la imagen */
+      }
 
   body
+    // Navbar
+    nav.navbar.navbar-expand-lg.navbar-light.bg-light
+      .container
+        a.navbar-brand(href="#") Electronik3000
+        button.navbar-toggler(type="button", data-toggle="collapse", data-target="#navbarNav", aria-controls="navbarNav", aria-expanded="false", aria-label="Toggle navigation")
+          span.navbar-toggler-icon
+        .collapse.navbar-collapse(id="navbarNav")
+          ul.navbar-nav.ml-auto
+            if usuario
+              li.nav-item
+                a.nav-link(href="#") Hola: #{usuario.correo}
+              li.nav-item
+                a.nav-link.text-black(href="/cart")
+                  i.fas.fa-cart-shopping.mr-2
+              li.nav-item
+                a.nav-link.text-red(href="/logout") 
+                  i.fas.fa-right-from-bracket.mr-2
+                  |  Cerrar Sesión
+            else
+              li.nav-item
+                a.nav-link(href="/login") Iniciar Sesión
+            li.nav-item
+              a.nav-link(href="#") Contacto
+
     .container
-      h1.text-center.my-4 Carrito de Compras
+      h1.text-center.mt-4.mb-4 Productos
 
-      
+      .row
+        each producto in productos
+          .col-md-4.mb-4
+            .card
+              // Muestra la imagen del producto si existe, o una imagen predeterminada
+              .product-img-container
+                if producto.imagen
+                  img.product-img(src=`/${producto.imagen}`, alt=producto.nombre)
+                else
+                  img.product-img(src='/images/default-product.jpg', alt='Producto sin imagen')
+                
+              .card-body
+                h5.card-title= producto.nombre
+                p.card-text= producto.descripcion
+                p.font-weight-bold Precio: $ #{producto.precio}
+                form(action=`/carrito/agregar/${producto.id}`, method="post")
+                  button.btn.btn-primary(type="submit") Agregar al Carrito
 
-          // Información del usuario
-          #user-info.text-center.mt-3
-
-      // Sección de productos
-      h2.text-center.my-4 Productos
-      #items.row
-
-      // Sección del carrito
-      h2.text-center.my-4 Carrito
-      #carrito
-        .list-group
-          // Los productos del carrito se agregarán aquí mediante JavaScript
-
-      // Total y botones de acción
-      h3.text-center Total: <span id="total">0 CLP</span>
-      .text-center
-        button#boton-vaciar.btn.btn-danger.mt-3 Vaciar Carrito
-        button#boton-pago.btn.btn-success.mt-3 Realizar Pago
-
-    // Aquí puedes incluir un script adicional si necesitas
+    script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js")

@@ -19,7 +19,9 @@ html
       .collapse.navbar-collapse#navbarNav
         ul.navbar-nav.ml-auto
           li.nav-item.active
-            a.nav-link(href="#") Bienvenido: User
+            a.nav-link(href="#") Bienvenido: #{usuario.correo}
+          li.nav-item
+            a.nav-link(href="/logout") Cerrar Sesión
 
     #wrapper
       // Sidebar
@@ -41,6 +43,10 @@ html
             a.nav-link.text-white(href="/usuarios") 
               i.fas.fa-users.mr-2
               |  Usuarios
+          li.nav-item
+            a.nav-link.text-red(href="/logout") 
+              i.fas.fa-right-from-bracket.mr-2
+              |  Cerrar Sesión
           // Agrega más enlaces según sea necesario
 
       // Contenido de la página
