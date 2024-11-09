@@ -58,14 +58,14 @@ document.addEventListener("DOMContentLoaded", () => {
       cartItem.innerHTML = `
         <span class="item-name">${item.name}</span>
         <span class="item-quantity">Cantidad: ${item.quantity}</span>
-        <span class="item-price">Precio: $${itemTotal.toFixed(2)}</span>
+        <span class="item-price">Precio: $${itemTotal.toFixed(0)}</span>
         <button class="btn btn-sm btn-danger" data-id="${id}">Eliminar</button>
       `;
       cartContainer.appendChild(cartItem);
     }
 
     // Muestra el total
-    document.getElementById("cart-total").textContent = `Total: $${total.toFixed(2)}`;
+    document.getElementById("cart-total").textContent = `Total: $${total.toFixed(0)}`;
 
     // Agrega evento de eliminar para cada botón
     cartContainer.querySelectorAll("button[data-id]").forEach((button) => {
@@ -79,27 +79,78 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Función para aumentar la cantidad de un producto
+  function increaseQuantity(id) {
+    cart[id].quantity += 1;
+    saveCart();
+    updateCartDisplay();
+    updateCartCount(); // Actualizar el contador
+  }
+
+  // Función para disminuir la cantidad de un producto
+  function decreaseQuantity(id) {
+    if (cart[id].quantity > 1) {
+      cart[id].quantity -= 1;
+    } else {
+      delete cart[id]; // Eliminar el producto si la cantidad llega a 0
+    }
+    saveCart();
+    updateCartDisplay();
+    updateCartCount(); // Actualizar el contador
+  }
+
   // Función para actualizar el modal con el resumen del carrito
   function updateCartModal() {
     cartSummaryElement.innerHTML = ""; // Limpiar contenido previo
     let total = 0;
 
+    // Iterar sobre los productos del carrito
     for (const id in cart) {
       const item = cart[id];
       const itemTotal = item.price * item.quantity;
       total += itemTotal;
 
+      // Crear el contenedor para cada ítem en el carrito
       const cartItem = document.createElement("div");
       cartItem.classList.add("cart-item", "mb-2");
       cartItem.innerHTML = `
         <span class="item-name">${item.name}</span>
-        <span class="item-quantity">Cantidad: ${item.quantity}</span>
-        <span class="item-price">Precio: $${itemTotal.toFixed(2)}</span>
+        <span class="item-quantity">Cantidad: <span id="quantity-${id}">${item.quantity}</span></span>
+        <span class="item-price">Precio: $${itemTotal.toFixed(0)}</span>
+        <div class="item-controls">
+          <button class="btn btn-sm btn-secondary" id="decrease-${id}" data-id="${id}">-</button>
+          <button class="btn btn-sm btn-secondary" id="increase-${id}" data-id="${id}">+</button>
+          <button class="btn btn-sm btn-danger" id="remove-${id}" data-id="${id}">Eliminar</button>
+        </div>
       `;
       cartSummaryElement.appendChild(cartItem);
+
+      // Evento para disminuir la cantidad
+      document.getElementById(`decrease-${id}`).addEventListener("click", () => {
+        if (cart[id].quantity > 1) {
+          cart[id].quantity--;
+          saveCart();
+          updateCartModal();  // Actualizar el carrito
+        }
+      });
+
+      // Evento para aumentar la cantidad
+      document.getElementById(`increase-${id}`).addEventListener("click", () => {
+        cart[id].quantity++;
+        saveCart();
+        updateCartModal();  // Actualizar el carrito
+      });
+
+      // Evento para eliminar el producto del carrito
+      document.getElementById(`remove-${id}`).addEventListener("click", () => {
+        delete cart[id];
+        saveCart();
+        updateCartModal();  // Actualizar el carrito
+      });
     }
 
-    cartTotalElement.textContent = `Total: $${total.toFixed(2)}`;
+    // Actualizar el total
+    cartTotalElement.textContent = `Total: $${total.toFixed(0)}`;
   }
 
   // Muestra el modal cuando se hace clic en el carrito

@@ -16,10 +16,16 @@ router.get('/login', (req, res) => {
   });
   
 
+  router.get('/logout-page', (req, res) => {
+    res.render('auth/logout-page');
+  });
+  
+  
+
   router.get('/logout',(req,res) =>{
     req.session.destroy();
     res.clearCookie('token');
-    res.redirect('/login');
+    res.redirect('/logout-page');
 });
 
 

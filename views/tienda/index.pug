@@ -47,9 +47,9 @@ html
               li.nav-item
                 a.nav-link(href="#") Hola: #{usuario.correo}
               li.nav-item
-                a.nav-link.text-black(href="#", data-toggle="modal", data-target="#cartModal") 
-                i.fas.fa-cart-shopping.mr-2
-                  span#cart-count.badge.badge-pill.badge-primary 0
+                  a.nav-link.text-black(href="#", data-toggle="modal", data-target="#cartModal") 
+                   i.fas.fa-cart-shopping.mr-2
+                   span#cart-count.badge.badge-pill.badge-primary 0
                     | Carrito
               li.nav-item
                 a.nav-link.text-red(href="/logout") 
@@ -106,7 +106,6 @@ html
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-danger" id="clear-cart">Eliminar Carrito</button>
         <button type="button" class="btn btn-primary" id="checkout">Pagar</button>
       </div>
     </div>

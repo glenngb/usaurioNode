@@ -53,7 +53,7 @@ const tiendaRutas = require('./routes/tiendaRutas');
 
 // Rutas de la aplicación
 app.get('/', (req, res) => {
-  res.render('index', { titulo: 'Bienvenido a la Tienda' });
+  res.render('index');
 });
 
 app.get('/dashboard', (req, res) => {
