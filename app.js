@@ -2,7 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const dotenv = require('dotenv');
 const { conectarBD, sequelize } = require('./config/db');
-
+const webpayRoutes = require("./routes/webpay_plus");
 // Inicializa dotenv
 dotenv.config();
 
@@ -106,6 +106,10 @@ app.post('/api/login', async (req, res) => {
 
   res.status(401).json({ success: false, message: 'Credenciales inválidas' });
 });
+
+//webpay_plus
+app.use("/webpay_plus", webpayRoutes);
+
 
 // Configuración del puerto y lanzamiento del servidor
 const PUERTO = process.env.PUERTO || 3000;

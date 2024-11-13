@@ -1,0 +1,13 @@
+doctype html
+html
+  head
+    title Crear Transacción
+  body
+    h1 Crear Transacción
+    p Orden de Compra: #{buyOrder}
+    p Session ID: #{sessionId}
+    p Monto: $#{amount}
+
+    form(action=url method="POST")
+      input(type="hidden" name="token_ws" value=token)
+      button(type="submit") Pagar

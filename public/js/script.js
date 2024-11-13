@@ -180,3 +180,76 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartDisplay();
   updateCartCount(); // Inicializar el contador de productos
 });
+
+
+script.
+  $('#editarUsuarioModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Botón que activó el modal
+    var id = button.data('id');
+    var nombre = button.data('nombre');
+    var rut = button.data('rut');
+    var correo = button.data('correo');
+    var rol = button.data('rol');
+
+    var modal = $(this);
+    modal.find('.modal-body #editar-id').val(id);
+    modal.find('.modal-body #editar-nombre').val(nombre);
+    modal.find('.modal-body #editar-rut').val(rut);
+    modal.find('.modal-body #editar-correo').val(correo);
+    modal.find('.modal-body #editar-rol').val(rol);
+
+    // Cambiar la acción del formulario para que apunte a la ruta de actualización del usuario
+    modal.find('form').attr('action', `/usuarios/${id}/actualizar`);
+  });
+
+script.
+  document.addEventListener('DOMContentLoaded', function () {
+    const eliminarBtns = document.querySelectorAll('.btn-eliminar');
+
+    eliminarBtns.forEach(btn => {
+      btn.addEventListener('click', function () {
+        const userId = this.getAttribute('data-id'); // Obtener el ID del usuario
+
+        // Mostrar la alerta de confirmación
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: "No podrás revertir esta acción",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminar',
+          cancelButtonText: 'Cancelar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Si el usuario confirma, hacer la petición de eliminación
+            fetch(`/usuarios/${userId}/eliminar`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  Swal.fire(
+                    'Eliminado!',
+                    'El usuario ha sido eliminado.',
+                    'success'
+                  );
+                  location.reload();
+                } else {
+                  Swal.fire('Error', 'No se pudo eliminar el usuario.', 'error');
+                }
+              })
+              .catch(error => {
+                Swal.fire('Error', 'Hubo un problema al eliminar el usuario.', 'error');
+              });
+          }
+        });
+      });
+    });
+  });
+
+// js página usuario  
+

@@ -1,0 +1,13 @@
+doctype html
+html
+  head
+    title Confirmar Transacción
+  body
+    h1 Resultado de la Transacción
+    if commitResponse
+      p Estado: #{commitResponse.status}
+      p Orden de Compra: #{commitResponse.buy_order}
+      p Session ID: #{commitResponse.session_id}
+      p Monto: $#{commitResponse.amount}
+    else
+      p No se pudo confirmar la transacción.
