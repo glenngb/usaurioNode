@@ -14,7 +14,7 @@ router.use(function (req, res, next) {
 });
 
 // Rutas para crear y confirmar la transacción
-router.get("/create", controller.create);
+router.post("/create", controller.create);
 router.get("/commit", controller.commit);
 router.post("/commit", controller.commit);
 

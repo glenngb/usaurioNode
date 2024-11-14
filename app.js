@@ -31,10 +31,16 @@ app.use((req, res, next) => {
   res.locals.usuario = req.session.usuario;
   next();
 });
+//webpay_plus
 
-// Middlewares para el parseo de datos
-app.use(express.urlencoded({ extended: false }));
+
+app.use(express.urlencoded({ extended: true }));
+
 app.use(express.json());
+// Middlewares para el parseo de datos
+app.use("/webpay_plus", webpayRoutes);
+
+
 
 // Servir archivos estáticos desde la carpeta 'public'
 app.use(express.static('public'));
@@ -107,8 +113,7 @@ app.post('/api/login', async (req, res) => {
   res.status(401).json({ success: false, message: 'Credenciales inválidas' });
 });
 
-//webpay_plus
-app.use("/webpay_plus", webpayRoutes);
+
 
 
 // Configuración del puerto y lanzamiento del servidor

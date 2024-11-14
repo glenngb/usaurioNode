@@ -34,16 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
       saveCart();
       updateCartDisplay();
       updateCartCount();  // Actualizar el contador de productos en el carrito
-        // Mostrar los productos y cantidades del carrito cada vez que se agrega un producto
-      console.log("Carrito actualizado:", getCartItemsWithQuantities());
     });
   });
-
-// Borrar el carrito
-function clearCart() {
-  localStorage.removeItem("cart");
-  console.log("Carrito borrado.");
-}
 
   // Guarda el carrito en localStorage
   function saveCart() {
@@ -161,79 +153,45 @@ function clearCart() {
     cartTotalElement.textContent = `Total: $${total.toFixed(0)}`;
   }
 
-  // Muestra el modal cuando se hace clic en el carrito
-  document.querySelector("#cart-count").parentElement.addEventListener("click", () => {
-    updateCartModal(); // Actualizar el contenido del modal
-    cartModal.show(); // Mostrar el modal
-  });
+  document.getElementById("checkout").addEventListener("click", () => {
+    const totalAmount = calculateTotalAmount(); // Función que calcula el total del carrito
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "/webpay_plus/create";
 
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "amount";
+    input.value = totalAmount;
 
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
 
-//integración botón webpay
-
-
-// Función para obtener los artículos con su id y cantidad
-function getCartItemsWithQuantities() {
-  const items = [];
-
-  // Recorremos el carrito y creamos el array con los productos
-  for (const id in cart) {
-    const item = cart[id];
-    items.push({
-      id: id,
-      quantity: item.quantity
-    });
-    console.log(`Producto ID: ${id}, Cantidad: ${item.quantity}`); // Log para verificar que está correcto
-  }
-
-  return items;
-}
-
-
- // Función para calcular el monto total del carrito
-function calculateTotalAmount() {
-  let total = 0;
-  for (const id in cart) {
-      total += cart[id].price * cart[id].quantity;
-  }
-  return total;
-}
-
-// Botón de "Pagar"
-document.getElementById("checkout").addEventListener("click", () => {
-  const amount = calculateTotalAmount();
-  const items = getCartItemsWithQuantities(); // Obtener los productos y cantidades
-
-  fetch("/webpay_plus/create", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      amount: amount,
-      items: items, // Envía los productos con sus cantidades
-    })
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.url && data.token) {
-      window.location.href = `${data.url}?token_ws=${data.token}`;
-    } else {
-      console.error("Error al crear la transacción", data);
-      alert("Hubo un problema al procesar el pago. Por favor, intenta nuevamente.");
-    }
-  })
-  .catch(error => {
-    console.error("Error en la solicitud POST:", error);
-    alert("Hubo un error al procesar tu solicitud. Por favor, intenta de nuevo más tarde.");
-  });
-
-  cartModal.hide();
+    cartModal.hide();  // Cerrar el modal
 });
 
+function calculateTotalAmount() {
+    let total = 0;
+    for (const id in cart) {
+        total += cart[id].price * cart[id].quantity;
+    }
+    return total;
+}
 
 
-// FIN integración botón webpay
+  /* Botón de "Pagar" (puedes agregar la lógica de pago aquí)
+  document.getElementById("checkout").addEventListener("click", () => {
+    alert("Funcionalidad de pago aún no implementada.");
+    cartModal.hide();  // Cerrar el modal
+  });*/
+  // 
+document.getElementById("checkout").addEventListener("click", () => {
+  // Redirigir a la ruta webpay_plus/create
+  window.location.href = "/webpay_plus/create";
+  cartModal.hide();  // Cerrar el modal
+});
+
 
   // Inicializar la vista del carrito al cargar la página
   updateCartDisplay();
@@ -309,4 +267,6 @@ script.
       });
     });
   });
+
+// js página usuario  
 
