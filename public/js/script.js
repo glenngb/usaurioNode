@@ -229,6 +229,7 @@ document.getElementById("checkout").addEventListener("click", () => {
   });
 
   cartModal.hide();
+  clearCart();
 });
 
 
@@ -238,6 +239,7 @@ document.getElementById("checkout").addEventListener("click", () => {
   // Inicializar la vista del carrito al cargar la página
   updateCartDisplay();
   updateCartCount(); // Inicializar el contador de productos
+
 });
 
 

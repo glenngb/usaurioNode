@@ -46,7 +46,7 @@ const crearComprador = async (req, res) => {
       pass,
       rol: 0, // Rol fijo de comprador
     });
-    res.redirect('/usuarios'); // debe redireccionar a la tienda
+    res.redirect('/login'); // debe redireccionar a la tienda
   } catch (error) {
     console.error('Error al crear el comprador:', error);
     res.status(500).send('Error al crear el comprador');
@@ -140,7 +140,7 @@ const crearComprador = async (req, res) => {
       pass,
       rol: 0, // Rol fijo de comprador
     });
-    res.redirect('/usuarios');
+    res.redirect('/login');
   } catch (error) {
     console.error('Error al crear el comprador:', error);
     res.status(500).send('Error al crear el comprador');
