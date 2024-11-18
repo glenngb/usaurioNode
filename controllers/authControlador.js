@@ -63,20 +63,22 @@ const iniciarSesion = async (req, res) => {
 
 // Middleware para validar el JWT en rutas protegidas
 const autenticarJWT = (req, res, next) => {
-    const token = req.cookies.token;
+    const token = req.cookies.token; // Obtiene el token de las cookies
 
     if (!token) {
-        return res.status(403).redirect('/auth/login');
+        return res.status(403).redirect('/auth/login'); // Redirige si no hay token
     }
 
     try {
-        const decoded = jwt.verify(token, JWT_SECRET);
+        const decoded = jwt.verify(token, JWT_SECRET); // Verifica el token
         req.user = decoded; // Almacena los datos del usuario en `req.user`
-        next();
+        next(); // Continúa con la siguiente función
     } catch (error) {
-        return res.status(401).redirect('/auth/login');
+        console.error("Error al verificar el token:", error);
+        return res.status(401).redirect('/auth/login'); // Redirige si el token es inválido
     }
 };
+
 
 // Cierra la sesión eliminando la cookie de JWT
 const cerrarSesion = (req, res) => {

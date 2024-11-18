@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 
 async function sendEmail(req, purchaseDetails = {
   customerName: "ivanr978@gmail.com",
-  email: "ivanr978@gmail.com",
+  email: "#{usuario.correo}",
   items: [
     { name: "Monitor LG", quantity: 2, price: 640000 },
     { name: "Producto 2", quantity: 1, price: 570000 },
