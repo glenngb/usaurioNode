@@ -312,3 +312,33 @@ script.
     });
   });
 
+  function crearJsonCarroDeCompras() {
+    // Obtener el correo de la sesión
+    const correoSesion = document.querySelector('#correoSesion').textContent;
+    // Obtener los productos del carro de compras
+    const productosCarro = document.querySelectorAll('.producto-carro');
+    // Crear un arreglo para almacenar los productos
+    const productosJson = [];
+    productosCarro.forEach(producto => {
+      const nombre = producto.querySelector('.nombre-producto').textContent;
+      const cantidad = producto.querySelector('.cantidad-producto').textContent;
+      const precio = producto.querySelector('.precio-producto').textContent;
+      // Crear un objeto para cada producto y agregarlo al arreglo
+      productosJson.push({
+        nombre: nombre,
+        cantidad: cantidad,
+        precio: precio
+      });
+    });
+    // Crear el JSON final
+    const jsonCarroDeCompras = {
+      correo: correoSesion,
+      productos: productosJson
+    };
+    // Convertir el objeto a JSON
+    const jsonCarroDeComprasString = JSON.stringify(jsonCarroDeCompras);
+    // Retornar el JSON como string
+    return jsonCarroDeComprasString;
+  }
+  // Guardar el JSON en el almacenamiento local
+  localStorage.setItem('carroDeCompras', jsonCarroDeComprasString);

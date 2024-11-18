@@ -1,6 +1,7 @@
 const { WebpayPlus } = require("transbank-sdk");
 const asyncHandler = require("../utils/asyncHandler");
 const Product = require("../models/Producto"); // Asegúrate de importar tu modelo de producto
+const sendEmail = require("../utils/sendEmails"); // Asegúrate de que esta función esté configurada para enviar correos
 
 // Crear Transacción
 exports.create = asyncHandler(async function (req, res) {
@@ -42,7 +43,6 @@ exports.commit = asyncHandler(async function (req, res) {
       error: "La lista de productos no se ha recibido correctamente",
     });
   }
-  
 
   // Si la transacción es exitosa, descontar el stock
   if (commitResponse.status === "AUTHORIZED") {
@@ -60,6 +60,26 @@ exports.commit = asyncHandler(async function (req, res) {
         });
       }
     }
+
+    // Detalles de la compra
+    const purchaseDetails = {
+      email: req.body.email, // Correo del usuario
+      customerName: req.body.customerName || "Cliente", // Nombre del cliente (si está disponible)
+      items: items.map(item => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price
+      })),
+      total: items.reduce((total, item) => total + (item.price * item.quantity), 0)
+    };
+
+    try {
+      // Enviar el correo con los detalles de la compra
+      await sendEmail(purchaseDetails);  // Llamar la función de envío de correo
+      console.log('Correo enviado exitosamente');
+    } catch (error) {
+      console.error('Error al enviar el correo:', error);
+    }
   }
 
   // Renderiza la vista de confirmación de la transacción
@@ -68,3 +88,80 @@ exports.commit = asyncHandler(async function (req, res) {
     commitResponse,
   });
 });
+
+async function realizarCompra(detalles) {
+  // ... lógica para realizar la compra ...
+  
+  // Ejemplo de detalles de la compra
+  const detalleCompra = `
+      Gracias por tu compra. Aquí están los detalles:
+
+      - Producto: ${detalles.productoNombre}
+      - Cantidad: ${detalles.cantidad}
+      - Precio: $${detalles.precio}
+      - Total: $${detalles.total}
+      - Fecha de compra: ${new Date().toLocaleDateString()}
+
+      Si tienes alguna pregunta, no dudes en contactarnos.
+  `;
+
+  const correoUsuario = detalles.correoUsuario; // Aquí deberías obtener el correo del usuario
+
+  // Enviar el correo con el detalle de la compra
+  await enviarCorreo(detalleCompra, correoUsuario);
+}
+
+async function manejarRespuesta(respuesta) {
+  if (respuesta.estado === 'AUTHORIZED') {
+      // Aquí se maneja la lógica después de la autorización
+      const detallesCompra = {
+          productoNombre: 'Nombre del producto',
+          cantidad: 2,
+          precio: 20.00,
+          total: 40.00,
+          correoUsuario: 'usuario@ejemplo.com', // Aquí deberías obtener el correo del usuario
+      };
+
+      // Crear el mensaje de detalle de compra
+      const detalleCompra = `
+          Gracias por tu compra. Aquí están los detalles:
+          - Producto: ${detallesCompra.productoNombre}
+          - Cantidad: ${detallesCompra.cantidad}
+          - Precio: $${detallesCompra.precio}
+          - Total: $${detallesCompra.total}
+          - Fecha de compra: ${new Date().toLocaleDateString()}
+          Si tienes alguna pregunta, no dudes en contactarnos.
+      `;
+
+      try {
+          // Enviar el correo con el detalle de la compra
+          await enviarCorreo(detalleCompra, detallesCompra.correoUsuario);
+          console.log('Correo enviado exitosamente a:', detallesCompra.correoUsuario);
+      } catch (error) {
+          console.error('Error al enviar el correo:', error);
+      }
+  }
+}
+
+// Esta función enviaría el correo de los detalles de la compra
+async function enviarCorreo(detalleCompra, correoUsuario) {
+  const nodemailer = require('nodemailer');
+  
+  const transporter = nodemailer.createTransport({
+    service: 'smtp-relay.brevo.com', // O el servicio de correo que estés usando
+    auth: {
+      user: 'ivanr978@gmail.com', // Reemplaza con tu correo
+      pass: 'C815qWK294XShTaB' // Reemplaza con tu contraseña o una app password
+    }
+  });
+
+  const mailOptions = {
+    from: 'tu-correo@gmail.com',
+    to: correoUsuario,
+    subject: 'Detalles de tu compra',
+    text: detalleCompra
+  };
+
+  await transporter.sendMail(mailOptions);
+  console.log('Correo enviado con éxito');
+}
