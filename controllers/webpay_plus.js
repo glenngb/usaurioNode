@@ -1,7 +1,7 @@
 const { WebpayPlus } = require("transbank-sdk");
 const asyncHandler = require("../utils/asyncHandler");
-const Product = require("../models/Producto"); // Asegúrate de importar tu modelo de producto
-const sendEmail = require("../utils/sendEmails"); // Asegúrate de que esta función esté configurada para enviar correos
+const Product = require("../models/Producto");
+const sendEmail = require("../utils/sendEmails");
 
 // Crear Transacción
 exports.create = asyncHandler(async function (req, res) {
@@ -17,7 +17,6 @@ exports.create = asyncHandler(async function (req, res) {
     returnUrl
   );
 
-  // Responde con JSON en lugar de renderizar una vista
   res.json({
     token: createResponse.token,
     url: createResponse.url,
@@ -26,7 +25,9 @@ exports.create = asyncHandler(async function (req, res) {
 
 // Confirmar Transacción
 exports.commit = asyncHandler(async function (req, res) {
-  console.log(req.body);
+  console.log("Datos recibidos en commit:", req.body);
+  console.log("Session data:", req.session);
+  
   const token = req.query.token_ws || req.body.token_ws;
 
   if (!token) {
@@ -44,124 +45,66 @@ exports.commit = asyncHandler(async function (req, res) {
     });
   }
 
-  // Si la transacción es exitosa, descontar el stock
+  // Si la transacción es exitosa
   if (commitResponse.status === "AUTHORIZED") {
     console.log("Estado: AUTHORIZED");
-    for (const item of items) {
-      // Encuentra el producto en la base de datos y descuenta el stock
-      const product = await Product.findById(item.productId);
-
-      if (product && product.stock >= item.quantity) {
-        product.stock -= item.quantity;
-        await product.save();
-      } else {
-        return res.status(400).json({
-          error: `Stock insuficiente para el producto con ID ${item.productId}`,
-        });
-      }
+    
+    // Verificar que existe la sesión del usuario
+    if (!req.session || !req.session.usuario || !req.session.usuario.correo) {
+      return res.status(400).json({ error: "No se encontró la sesión del usuario" });
     }
 
-    // Detalles de la compra
+    // Obtener el email del usuario de la sesión
+    const userEmail = req.session.usuario.correo;
+    
+    // Actualizar stock
+    try {
+      for (const item of items) {
+        const product = await Product.findById(item.productId);
+        if (!product) {
+          throw new Error(`Producto no encontrado: ${item.productId}`);
+        }
+        if (product.stock < item.quantity) {
+          throw new Error(`Stock insuficiente para: ${product.name}`);
+        }
+        product.stock -= item.quantity;
+        await product.save();
+      }
+    } catch (error) {
+      console.error("Error al actualizar stock:", error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    // Preparar detalles de la compra para el correo
     const purchaseDetails = {
-      email: req.body.email, // Correo del usuario
-      customerName: req.body.customerName || "Cliente", // Nombre del cliente (si está disponible)
       items: items.map(item => ({
         name: item.name,
         quantity: item.quantity,
         price: item.price
       })),
-      total: items.reduce((total, item) => total + (item.price * item.quantity), 0)
+      total: items.reduce((total, item) => total + (item.price * item.quantity), 0),
+      customerEmail: userEmail, // Usar el email de la sesión
+      customerName: req.session.usuario.nombre || "Cliente" // Si hay un nombre en la sesión, usarlo
     };
+
+    console.log("Detalles de compra para correo:", purchaseDetails);
 
     try {
       // Enviar el correo con los detalles de la compra
-      await sendEmail(purchaseDetails);  // Llamar la función de envío de correo
+      await sendEmail(purchaseDetails);
       console.log('Correo enviado exitosamente');
     } catch (error) {
       console.error('Error al enviar el correo:', error);
+      // No devolvemos error al cliente ya que la compra fue exitosa
     }
+  } else {
+    console.log("Transacción no autorizada");
+    return res.status(400).json({ error: "Transacción no autorizada" });
   }
 
-  // Renderiza la vista de confirmación de la transacción
+  // Renderiza la vista de confirmación
   res.render("webpay_plus/commit", {
     token,
     commitResponse,
   });
 });
-
-async function realizarCompra(detalles) {
-  // ... lógica para realizar la compra ...
-  
-  // Ejemplo de detalles de la compra
-  const detalleCompra = `
-      Gracias por tu compra. Aquí están los detalles:
-
-      - Producto: ${detalles.productoNombre}
-      - Cantidad: ${detalles.cantidad}
-      - Precio: $${detalles.precio}
-      - Total: $${detalles.total}
-      - Fecha de compra: ${new Date().toLocaleDateString()}
-
-      Si tienes alguna pregunta, no dudes en contactarnos.
-  `;
-
-  const correoUsuario = detalles.correoUsuario; // Aquí deberías obtener el correo del usuario
-
-  // Enviar el correo con el detalle de la compra
-  await enviarCorreo(detalleCompra, correoUsuario);
-}
-
-async function manejarRespuesta(respuesta) {
-  if (respuesta.estado === 'AUTHORIZED') {
-      // Aquí se maneja la lógica después de la autorización
-      const detallesCompra = {
-          productoNombre: 'Nombre del producto',
-          cantidad: 2,
-          precio: 20.00,
-          total: 40.00,
-          correoUsuario: 'usuario@ejemplo.com', // Aquí deberías obtener el correo del usuario
-      };
-
-      // Crear el mensaje de detalle de compra
-      const detalleCompra = `
-          Gracias por tu compra. Aquí están los detalles:
-          - Producto: ${detallesCompra.productoNombre}
-          - Cantidad: ${detallesCompra.cantidad}
-          - Precio: $${detallesCompra.precio}
-          - Total: $${detallesCompra.total}
-          - Fecha de compra: ${new Date().toLocaleDateString()}
-          Si tienes alguna pregunta, no dudes en contactarnos.
-      `;
-
-      try {
-          // Enviar el correo con el detalle de la compra
-          await enviarCorreo(detalleCompra, detallesCompra.correoUsuario);
-          console.log('Correo enviado exitosamente a:', detallesCompra.correoUsuario);
-      } catch (error) {
-          console.error('Error al enviar el correo:', error);
-      }
-  }
-}
-
-// Esta función enviaría el correo de los detalles de la compra
-async function enviarCorreo(detalleCompra, correoUsuario) {
-  const nodemailer = require('nodemailer');
-  
-  const transporter = nodemailer.createTransport({
-    service: 'smtp-relay.brevo.com', // O el servicio de correo que estés usando
-    auth: {
-      user: 'ivanr978@gmail.com', // Reemplaza con tu correo
-      pass: 'C815qWK294XShTaB' // Reemplaza con tu contraseña o una app password
-    }
-  });
-
-  const mailOptions = {
-    from: 'tu-correo@gmail.com',
-    to: correoUsuario,
-    subject: 'Detalles de tu compra',
-    text: detalleCompra
-  };
-
-  await transporter.sendMail(mailOptions);
-  console.log('Correo enviado con éxito');
-}

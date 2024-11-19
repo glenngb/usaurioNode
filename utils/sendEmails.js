@@ -1,22 +1,14 @@
 const nodemailer = require('nodemailer');
 
-async function sendEmail(req, purchaseDetails = {
-  customerName: "ivanr978@gmail.com",
-  email: "#{usuario.correo}",
-  items: [
-    { name: "Monitor LG", quantity: 2, price: 640000 },
-    { name: "Producto 2", quantity: 1, price: 570000 },
-  ],
-  total: 1210000
-  
-}) {
+async function sendEmail(purchaseDetails) {
   try {
-    // Validar que el correo esté presente
-    if (!purchaseDetails.email) {
+    // Validar que exista el email en purchaseDetails
+    if (!purchaseDetails.customerEmail) {
       throw new Error("No se proporcionó un email válido para enviar el correo.");
     }
 
-    console.log("Detalles de la compra:", purchaseDetails); // Para debug
+    console.log("Enviando correo a:", purchaseDetails.customerEmail);
+    console.log("Detalles de la compra:", purchaseDetails);
 
     // Configurar el transportador de nodemailer con los datos de Brevo SMTP
     const transporter = nodemailer.createTransport({
@@ -35,7 +27,7 @@ async function sendEmail(req, purchaseDetails = {
     // Configurar el contenido del correo
     const mailOptions = {
       from: "ivanr978@gmail.com",
-      to: purchaseDetails.email, // Correo forzado o proporcionado
+      to: purchaseDetails.customerEmail, // Este ahora será el email de la sesión
       subject: "Confirmación de tu compra",
       html: `
         <h1>Gracias por tu compra, ${purchaseDetails.customerName}!</h1>
@@ -52,7 +44,7 @@ async function sendEmail(req, purchaseDetails = {
       `
     };
 
-    console.log("Opciones de correo:", mailOptions); // Para debug
+    console.log("Opciones de correo:", mailOptions);
 
     // Enviar el correo
     const info = await transporter.sendMail(mailOptions);
