@@ -113,6 +113,18 @@ app.post('/api/login', async (req, res) => {
   res.status(401).json({ success: false, message: 'Credenciales inválidas' });
 });
 
+app.get("/api/productos/:id/verificar-stock", async (req, res) => {
+  const { id } = req.params;
+  const producto = await Producto.findByPk(id);
+
+  if (!producto || producto.stock <= 0) {
+    return res.json({ success: false, nombre: producto?.nombre || "Desconocido" });
+  }
+
+  res.json({ success: true, stock: producto.stock });
+});
+
+
 
 
 
